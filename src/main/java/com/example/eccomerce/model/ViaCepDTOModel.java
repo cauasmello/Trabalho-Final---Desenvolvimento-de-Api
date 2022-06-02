@@ -1,6 +1,6 @@
 package com.example.eccomerce.model;
 
-public class ViaCepDTO {
+public class ViaCepDTOModel {
 	
 	private String cep;
 	private String logradouro;
@@ -10,11 +10,11 @@ public class ViaCepDTO {
 	
 	
 	
-	public ViaCepDTO() {
+	public ViaCepDTOModel() {
 		super();
 	}
 
-	public ViaCepDTO(String cep, String logradouro, String bairro, String localidade, String uf) {
+	public ViaCepDTOModel(String cep, String logradouro, String bairro, String localidade, String uf) {
 		super();
 		this.cep = cep;
 		this.logradouro = logradouro;
