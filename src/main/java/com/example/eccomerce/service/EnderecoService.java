@@ -1,7 +1,6 @@
 package com.example.eccomerce.service;
 
-import com.example.eccomerce.exception.EndereçoExisteException;
-import com.example.eccomerce.exception.EndereçoNotException;
+import com.example.eccomerce.exception.GeneralException;
 import com.example.eccomerce.model.EnderecoModel;
 import com.example.eccomerce.model.ViaCepDTOModel;
 import com.example.eccomerce.repository.EnderecoRepository;
@@ -25,23 +24,20 @@ public class EnderecoService {
         return repositorio.findAll();
     }
 
-    public EnderecoModel listaEnderecos(Integer id) throws EndereçoNotException {
+    public EnderecoModel listaEnderecos(Integer id) throws GeneralException {
         Optional<EnderecoModel> optional = repositorio.findById(id);
         if (optional.isEmpty()) {
-            throw new EndereçoNotException("Endereço não existe");
+            throw new GeneralException("Endereço não existe");
         }
         return optional.get();
     }
 
-    public void verificaEnderecoExiste(EnderecoModel endereco) throws EndereçoExisteException {
+    public EnderecoModel inserir(EnderecoModel endereco) throws GeneralException {
         Optional<EnderecoModel> optional = repositorio.findById(endereco.getId());
         if (optional.isPresent()) {
-            throw new EndereçoExisteException("Livro já existe");
+            throw new GeneralException("Endereço já existe");
         }
 
-    }
-
-    public EnderecoModel inserir(EnderecoModel endereco) throws EndereçoExisteException {
         ViaCepDTOModel novoEndereco = viaCep.getViaCep(endereco.getCep());
         endereco.setRua(novoEndereco.getLogradouro());
         endereco.setCidade(novoEndereco.getLocalidade());
@@ -51,15 +47,14 @@ public class EnderecoService {
         return repositorio.save(endereco);
     }
 
-    public EnderecoModel atualizarPorId(EnderecoModel endereco, Integer id) throws EndereçoExisteException, EndereçoNotException {
+    public EnderecoModel atualizarPorId(EnderecoModel endereco, Integer id) throws GeneralException {
         Optional<EnderecoModel> optional = repositorio.findById(id);
         if (optional.isEmpty()) {
-            throw new EndereçoNotException("Endereço não existe");
+            throw new GeneralException("Endereço não existe");
         }
         EnderecoModel enderecoOld = optional.get();
 
         if (endereco.getId() != null) {
-            verificaEnderecoExiste(endereco);
             enderecoOld.setId(endereco.getId());
         }
 
@@ -94,10 +89,10 @@ public class EnderecoService {
         return enderecoOld;
     }
 
-    public String removerPorId(Integer id) throws EndereçoNotException {
+    public String removerPorId(Integer id) throws GeneralException {
         Optional<EnderecoModel> optional = repositorio.findById(id);
         if (optional.isEmpty()) {
-            throw new EndereçoNotException("Endereço não existe");
+            throw new GeneralException("Endereço não existe");
         }
         repositorio.deleteById(id);
         return "Deletado com sucesso";
