@@ -1,5 +1,7 @@
 package com.example.eccomerce.models;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,12 +11,16 @@ public class ClienteModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     private String nome;
 
+    @NotNull
     private Long cpf;
 
+    @NotNull
     private Long telefone;
 
+    @NotNull
     private Date nascimento;
 
     @OneToOne
@@ -33,5 +39,45 @@ public class ClienteModel {
         this.telefone = telefone;
         this.nascimento = nascimento;
         this.user = user;
+    }
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Long getCpf() {
+        return this.cpf;
+    }
+
+    public void setCpf(Long cpf) {
+        this.cpf = cpf;
+    }
+
+    public Long getTelefone() {
+        return this.telefone;
+    }
+
+    public void setTelefone(Long telefone) {
+        this.telefone = telefone;
+    }
+
+    public Date getNascimento() {
+        return this.nascimento;
+    }
+
+    public void setNascimento(Date nascimento) {
+        this.nascimento = nascimento;
+    }
+
+    public UserModel getUser() {
+        return user;
     }
 }

@@ -5,7 +5,6 @@ import com.example.eccomerce.models.EnderecoModel;
 import com.example.eccomerce.models.ViaCepModel;
 import com.example.eccomerce.repositories.EnderecoRepository;
 import com.example.eccomerce.resources.ViaCepResource;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,31 +15,36 @@ import java.util.Optional;
 @Service
 public class EnderecoService {
     @Autowired
-    EnderecoRepository repositorio;
+    EnderecoRepository repository;
 
     @Autowired
     ViaCepResource viaCep;
 
     public List<EnderecoModel> getAll() {
-        List<EnderecoModel> list = repositorio.findAll();
+        List<EnderecoModel> list = repository.findAll();
         System.out.println(list);
         return list;
     }
 
     public EnderecoModel get(Integer id) throws GeneralException {
-        Optional<EnderecoModel> optional = repositorio.findById(id);
+        Optional<EnderecoModel> optional = repository.findById(id);
         if (optional.isEmpty()) {
             throw new GeneralException("Endereço não existe!");
         }
         return optional.get();
     }
 
-    public String add(@NotNull EnderecoModel endereco) throws GeneralException {
-        if(endereco.getId() != null){
-            Optional<EnderecoModel> optional = repositorio.findById(endereco.getId());
-            if (optional.isPresent()) {
-                throw new GeneralException("Endereço já existe!");
-            }
+    public String add(EnderecoModel endereco) throws GeneralException {
+        if(endereco.getCep() == null){
+            throw new GeneralException("CEP Invalido");
+        }
+
+        if(endereco.getNumero() == null){
+            throw new GeneralException("Numero Invalido");
+        }
+
+        if(endereco.getComplemento() == null){
+            throw new GeneralException("Complemento Invalido");
         }
 
         ViaCepModel novoEndereco = viaCep.getViaCep(endereco.getCep());
@@ -49,12 +53,12 @@ public class EnderecoService {
         endereco.setEstado(novoEndereco.getUf());
         endereco.setBairro(novoEndereco.getBairro());
 
-        repositorio.save(endereco);
+        repository.save(endereco);
         return "Criado com sucesso!";
     }
 
     public String put(EnderecoModel enderecoNew, Integer id) throws GeneralException {
-        Optional<EnderecoModel> optional = repositorio.findById(id);
+        Optional<EnderecoModel> optional = repository.findById(id);
         if (optional.isEmpty()) {
             throw new GeneralException("Endereço não existe!");
         }
@@ -93,11 +97,11 @@ public class EnderecoService {
     }
 
     public String delete(Integer id) throws GeneralException {
-        Optional<EnderecoModel> optional = repositorio.findById(id);
+        Optional<EnderecoModel> optional = repository.findById(id);
         if (optional.isEmpty()) {
             throw new GeneralException("Endereço não existe!");
         }
-        repositorio.deleteById(id);
+        repository.deleteById(id);
         return "Deletado com sucesso";
     }
 

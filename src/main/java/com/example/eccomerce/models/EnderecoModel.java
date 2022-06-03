@@ -1,5 +1,7 @@
 package com.example.eccomerce.models;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.*;
 
 
@@ -10,18 +12,25 @@ public class EnderecoModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     private String cep;
 
+    @NotNull
     private String rua;
 
+    @NotNull
     private String bairro;
 
+    @NotNull
     private String cidade;
 
+    @NotNull
     private String numero;
 
+    @NotNull
     private String complemento;
 
+    @NotNull
     private String estado;
 
     @ManyToOne()
