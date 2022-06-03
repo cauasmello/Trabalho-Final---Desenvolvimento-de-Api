@@ -28,6 +28,23 @@ public class EnderecoModel {
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteModel cliente;
 
+    public EnderecoModel() {
+        super();
+    }
+
+    public EnderecoModel(Integer id, String cep, String rua, String bairro, String cidade, String numero, String complemento, String estado, ClienteModel cliente) {
+        super();
+        this.id = id;
+        this.cep = cep;
+        this.rua = rua;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.estado = estado;
+        this.cliente = cliente;
+    }
+
 
     public Integer getId() {
         return id;
@@ -110,25 +127,6 @@ public class EnderecoModel {
 
 
     public void setCliente(ClienteModel cliente) {
-        this.cliente = cliente;
-    }
-
-
-    public EnderecoModel() {
-        super();
-    }
-
-
-    public EnderecoModel(Integer id, String cep, String rua, String bairro, String cidade, String numero, String complemento, String estado, ClienteModel cliente) {
-        super();
-        this.id = id;
-        this.cep = cep;
-        this.rua = rua;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.estado = estado;
         this.cliente = cliente;
     }
 }

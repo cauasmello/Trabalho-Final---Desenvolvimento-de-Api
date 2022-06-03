@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class ClienteModel {
+public class FuncionarioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -21,11 +21,11 @@ public class ClienteModel {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserModel user;
 
-    public ClienteModel() {
+    public FuncionarioModel() {
         super();
     }
 
-    public ClienteModel(Integer id, String nome, Long cpf, Long telefone, Date nascimento, UserModel user) {
+    public FuncionarioModel(Integer id, String nome, Long cpf, Long telefone, Date nascimento, UserModel user) {
         super();
         this.id = id;
         this.nome = nome;
