@@ -20,44 +20,44 @@ public class EnderecoController {
     EnderecoService service;
 
     @GetMapping
-    public ResponseEntity<List<EnderecoModel>> getAll() throws GeneralException {
+    public ResponseEntity<List<EnderecoModel>> getAll() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Lista de Endereços", "Segue a lista de Endereços");
+        headers.add("Status", "Lista dos seus endereços");
 
-        return new ResponseEntity<List<EnderecoModel>>(service.getAll(), headers, HttpStatus.valueOf(202));
+        return new ResponseEntity<>(service.getAll(), headers, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EnderecoModel> get(@PathVariable Integer id) throws GeneralException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Endereco", "Retornado");
+        headers.add("Status", "Seu endereço");
 
-        return new ResponseEntity<EnderecoModel>(service.get(id), headers, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(service.get(id), headers, HttpStatus.ACCEPTED);
     }
 
     @PostMapping
-    public ResponseEntity<EnderecoModel> add(@RequestBody EnderecoModel endereco) throws GeneralException {
+    public ResponseEntity<String> add(@RequestBody EnderecoModel endereco) throws GeneralException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Endereco", "Adicionado");
+        headers.add("Status", "Adicionado");
 
-        return new ResponseEntity<EnderecoModel>(service.add(endereco), headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.add(endereco), headers, HttpStatus.CREATED);
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EnderecoModel> put(@RequestBody EnderecoModel endereco, @PathVariable Integer id) throws GeneralException {
+    public ResponseEntity<String> put(@RequestBody EnderecoModel endereco, @PathVariable Integer id) throws GeneralException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Endereco", "Atualizado");
+        headers.add("Status", "Atualizado");
 
-        return new ResponseEntity<EnderecoModel>(service.put(endereco, id), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.put(endereco, id), headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) throws GeneralException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Endereco", "Deletado");
+        headers.add("Status", "Deletado");
 
-        return new ResponseEntity<String>(service.delete(id), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.delete(id), headers, HttpStatus.OK);
     }
 
 }
