@@ -1,4 +1,4 @@
-package com.example.eccomerce.exception;
+package com.example.eccomerce.exceptions;
 
 public class GeneralException extends Exception {
 

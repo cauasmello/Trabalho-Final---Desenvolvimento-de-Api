@@ -1,4 +1,4 @@
-package com.example.eccomerce.model;
+package com.example.eccomerce.models;
 
 import javax.persistence.*;
 
@@ -31,11 +31,6 @@ public class EnderecoModel {
 
     public Integer getId() {
         return id;
-    }
-
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
 
