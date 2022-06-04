@@ -28,11 +28,11 @@ public class UserModel {
     private Integer role;
 
     @JsonIgnore
-    @OneToOne(mappedBy="user")
+    @OneToOne(mappedBy="user", cascade = CascadeType.ALL)
     private ClienteModel cliente;
 
     @JsonIgnore
-    @OneToOne(mappedBy="user")
+    @OneToOne(mappedBy="user", cascade = CascadeType.ALL)
     private FuncionarioModel funcionario;
 
     public UserModel() {
@@ -59,7 +59,7 @@ public class UserModel {
         this.funcionario = funcionario;
     }
 
-    public UserModel(FuncrionarioDTOModel funcionario) {
+    public UserModel(FuncionarioDTOModel funcionario) {
         super();
         this.email = funcionario.getEmail();
         this.username = funcionario.getUsername();

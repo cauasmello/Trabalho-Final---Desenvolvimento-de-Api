@@ -1,8 +1,9 @@
 package com.example.eccomerce.models;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 
-public class FuncrionarioDTOModel {
+public class FuncionarioDTOModel {
 
     private String email;
     private String username;
@@ -14,11 +15,11 @@ public class FuncrionarioDTOModel {
     private Long telefone;
     private LocalDate nascimento;
 
-    public FuncrionarioDTOModel() {
+    public FuncionarioDTOModel() {
         super();
     }
 
-    public FuncrionarioDTOModel(String email, String username, String senha, String nome, Long cpf, Long telefone, LocalDate nascimento) {
+    public FuncionarioDTOModel(String email, String username, String senha, String nome, Long cpf, Long telefone, LocalDate nascimento) {
         super();
         this.email = email;
         this.username = username;
@@ -61,5 +62,12 @@ public class FuncrionarioDTOModel {
 
     public LocalDate getNascimento() {
         return nascimento;
+    }
+
+    public Boolean isNull() throws IllegalAccessException {
+        for (Field f : getClass().getDeclaredFields()) {
+            if(f.get(this) == null) return true;
+        }
+        return false;
     }
 }

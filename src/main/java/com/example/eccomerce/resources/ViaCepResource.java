@@ -7,6 +7,7 @@ import com.example.eccomerce.models.ViaCepModel;
 
 @Component
 public class ViaCepResource {
+
     public ViaCepModel getViaCep(String cep){
         String url = "https://viacep.com.br/ws/" + cep + "/json/";
 

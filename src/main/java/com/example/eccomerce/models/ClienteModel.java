@@ -1,10 +1,9 @@
 package com.example.eccomerce.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.br.CPF;
-import javax.validation.constraints.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class ClienteModel {
     @Column(name = "nome")
     private String nome;
 
-    @CPF
     @NotNull
     @Column(name = "cpf", unique = true)
     private Long cpf;
@@ -32,10 +30,10 @@ public class ClienteModel {
     @Column(name = "nascimento")
     private LocalDate nascimento;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<PedidoModel> pedidos;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<EnderecoModel> endereco;
 
     @JsonIgnore
@@ -60,6 +58,7 @@ public class ClienteModel {
     }
 
     public ClienteModel(ClienteDTOModel clienteDTO, UserModel user) {
+        super();
         this.nome = clienteDTO.getNome();
         this.cpf = clienteDTO.getCpf();
         this.nascimento = clienteDTO.getNascimento();

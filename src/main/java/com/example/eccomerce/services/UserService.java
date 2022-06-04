@@ -1,7 +1,10 @@
 package com.example.eccomerce.services;
 
 import com.example.eccomerce.exceptions.GeneralException;
-import com.example.eccomerce.models.UserModel;
+import com.example.eccomerce.models.*;
+import com.example.eccomerce.repositories.ClienteRepository;
+import com.example.eccomerce.repositories.EnderecoRepository;
+import com.example.eccomerce.repositories.FuncionarioRepository;
 import com.example.eccomerce.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,27 +15,74 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    UserRepository repository;
+    UserRepository userRepository;
 
-    public List<UserModel> getAll() {
-        List<UserModel> list = repository.findAll();
-        System.out.println(list);
-        return list;
+    @Autowired
+    ClienteRepository clienteRepository;
+
+    @Autowired
+    FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+    EnderecoRepository enderecoRepository;
+
+    public List<UserModel> getAllCliente() {
+        return userRepository.findByRole(0);
     }
 
-    public String create(UserModel user) throws GeneralException {
-        if(user.getEmail() == null){
-            throw new GeneralException("Email Invalido");
+    public List<UserModel> getAllFuncionario() {
+        return userRepository.findByRole(1);
+    }
+
+    public String createCliente(ClienteDTOModel user) throws GeneralException {
+        try {
+            if(user.isNull()){
+                throw new GeneralException("Parametros invalido");
+            }
+        } catch (Exception e) {
+            throw new GeneralException("Parametros invalido");
         }
 
-        if(user.getUsername() == null){
-            throw new GeneralException("Username Invalido");
+        Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
+        if (existUser > 0) {
+            throw new GeneralException("Usuario já existe");
         }
+        UserModel userModel = new UserModel(user);
 
-        if(user.getSenha() == null){
-            throw new GeneralException("Senha Invalido");
-        }
-        repository.save(user);
+        ClienteModel clienteModel = new ClienteModel(user, userModel);
+
+        EnderecoModel enderecoModel = new EnderecoModel(user, clienteModel);
+
+        userRepository.save(userModel);
+        clienteRepository.save(clienteModel);
+        enderecoRepository.save(enderecoModel);
         return "Criado com sucesso!";
+    }
+
+    public String createFuncionario(FuncionarioDTOModel user) throws GeneralException {
+        try {
+            if(user.isNull()){
+                throw new GeneralException("Parametros invalido");
+            }
+        } catch (Exception e) {
+            throw new GeneralException("Parametros invalido");
+        }
+
+        Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
+        if(existUser > 0){
+            throw new GeneralException("Usuario já existe");
+        }
+
+        UserModel userModel = new UserModel(user);
+
+        FuncionarioModel funcionarioModel = new FuncionarioModel(user, userModel);
+
+        userRepository.save(userModel);
+        funcionarioRepository.save(funcionarioModel);
+        return "Criado com sucesso!";
+    }
+
+    public String login(UserModel user) {
+        return "Logado com sucesso";
     }
 }

@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "funcionarios")
@@ -34,11 +35,14 @@ public class FuncionarioModel {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserModel user;
 
+    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL)
+    private List<ProdutoModel> produtos;
+
     public FuncionarioModel() {
         super();
     }
 
-    public FuncionarioModel(Integer id, String nome, Long cpf, Long telefone, LocalDate nascimento, UserModel user) {
+    public FuncionarioModel(Integer id, String nome, Long cpf, Long telefone, LocalDate nascimento, UserModel user, List<ProdutoModel> produtos) {
         super();
         this.id = id;
         this.nome = nome;
@@ -46,9 +50,10 @@ public class FuncionarioModel {
         this.telefone = telefone;
         this.nascimento = nascimento;
         this.user = user;
+        this.produtos = produtos;
     }
 
-    public FuncionarioModel(FuncrionarioDTOModel funcionario, UserModel user) {
+    public FuncionarioModel(FuncionarioDTOModel funcionario, UserModel user) {
         super();
         this.nome = funcionario.getNome();
         this.cpf = funcionario.getCpf();

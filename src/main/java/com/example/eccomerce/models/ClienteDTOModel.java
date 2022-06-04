@@ -1,5 +1,10 @@
 package com.example.eccomerce.models;
 
+import com.example.eccomerce.resources.ViaCepResource;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.constraints.NotNull;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 public class ClienteDTOModel {
@@ -15,18 +20,22 @@ public class ClienteDTOModel {
     private LocalDate nascimento;
 
     private String cep;
+    private String numero;
+    private String complemento;
+
     private String rua;
     private String bairro;
     private String cidade;
-    private String numero;
-    private String complemento;
     private String estado;
+
+    @Autowired
+    ViaCepResource viaCep;
 
     public ClienteDTOModel() {
         super();
     }
 
-    public ClienteDTOModel(String email, String username, String senha, String nome, Long cpf, Long telefone, LocalDate nascimento, ViaCepModel viaCep) {
+    public ClienteDTOModel(@NotNull String email, @NotNull String username, @NotNull String senha, @NotNull String nome, @NotNull Long cpf, @NotNull Long telefone, @NotNull LocalDate nascimento, @NotNull String cep, @NotNull String numero, @NotNull String complemento) {
         super();
         this.email = email;
         this.username = username;
@@ -38,13 +47,20 @@ public class ClienteDTOModel {
         this.telefone = telefone;
         this.nascimento = nascimento;
 
-        this.cep = viaCep.getCep();
-        this.rua = viaCep.getLogradouro();
-        this.bairro = viaCep.getBairro();
-        this.cidade = viaCep.getLocalidade();
-        this.numero = viaCep.getNumero();
-        this.complemento = viaCep.getComplemento();
-        this.estado = viaCep.getUf();
+        this.cep = cep;
+        this.numero = numero;
+        this.complemento = complemento;
+
+        assert false;
+        ViaCepModel viaCepModel = this.viaCep.getViaCep(cep);
+        this.setViaCep(viaCepModel.getLogradouro(), viaCepModel.getBairro(), viaCepModel.getLocalidade(), viaCepModel.getUf());
+    }
+
+    public void setViaCep(@NotNull String rua, @NotNull String bairro, @NotNull String cidade, @NotNull String estado){
+        this.rua = rua;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
     }
 
     public String getEmail() {
@@ -105,5 +121,12 @@ public class ClienteDTOModel {
 
     public String getEstado() {
         return estado;
+    }
+
+    public Boolean isNull() throws IllegalAccessException {
+        for (Field f : getClass().getDeclaredFields()) {
+            if(f.get(this) == null) return true;
+        }
+        return false;
     }
 }

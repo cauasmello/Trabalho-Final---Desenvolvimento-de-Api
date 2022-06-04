@@ -37,7 +37,7 @@ public class PedidoModel {
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteModel cliente;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<PedidoProdutoModel> produtos;
 
     public PedidoModel() {
