@@ -1,16 +1,26 @@
 package com.example.eccomerce.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
+@Table(name = "categorias")
 public class CategoriaModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+	@NotNull
+	@Column(name = "nome")
     private String nome;
 
+	@NotNull
+	@Column(name = "descricao")
     private String descricao;
+
+	@OneToMany(mappedBy = "categoria")
+	private List<ProdutoModel> produtos;
 
     public CategoriaModel() {
         super();
@@ -46,6 +56,12 @@ public class CategoriaModel {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-    
-    
+
+	public List<ProdutoModel> getProdutos(){
+		return produtos;
+	}
+
+	public void setProdutos(List<ProdutoModel> produtos) {
+		this.produtos = produtos;
+	}
 }

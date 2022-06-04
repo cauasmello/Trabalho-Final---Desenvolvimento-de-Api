@@ -1,11 +1,13 @@
 package com.example.eccomerce.models;
 
-import org.jetbrains.annotations.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotNull;
 
 import javax.persistence.*;
 
 
 @Entity
+@Table(name = "enderecos")
 public class EnderecoModel {
 
     @Id
@@ -13,26 +15,34 @@ public class EnderecoModel {
     private Integer id;
 
     @NotNull
+    @Column(name = "cep")
     private String cep;
 
     @NotNull
+    @Column(name = "rua")
     private String rua;
 
     @NotNull
+    @Column(name = "bairro")
     private String bairro;
 
     @NotNull
+    @Column(name = "cidade")
     private String cidade;
 
     @NotNull
+    @Column(name = "numero")
     private String numero;
 
     @NotNull
+    @Column(name = "complemento")
     private String complemento;
 
     @NotNull
+    @Column(name = "estado")
     private String estado;
 
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteModel cliente;
@@ -54,6 +64,29 @@ public class EnderecoModel {
         this.cliente = cliente;
     }
 
+    public EnderecoModel(ViaCepModel viaCep, ClienteModel cliente) {
+        super();
+        this.cep = viaCep.getCep();
+        this.rua = viaCep.getLogradouro();
+        this.bairro = viaCep.getBairro();
+        this.cidade = viaCep.getLocalidade();
+        this.numero = viaCep.getNumero();
+        this.complemento = viaCep.getComplemento();
+        this.estado = viaCep.getUf();
+        this.cliente = cliente;
+    }
+
+    public EnderecoModel(ClienteDTOModel clienteDTO, ClienteModel cliente) {
+        super();
+        this.cep = clienteDTO.getCep();
+        this.rua = clienteDTO.getRua();
+        this.bairro = clienteDTO.getBairro();
+        this.cidade = clienteDTO.getCidade();
+        this.numero = clienteDTO.getNumero();
+        this.complemento = clienteDTO.getComplemento();
+        this.estado = clienteDTO.getEstado();
+        this.cliente = cliente;
+    }
 
     public Integer getId() {
         return id;

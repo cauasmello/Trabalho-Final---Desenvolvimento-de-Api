@@ -1,16 +1,16 @@
 package com.example.eccomerce.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.example.eccomerce.exceptions.GeneralException;
 import com.example.eccomerce.models.CategoriaModel;
 import com.example.eccomerce.repositories.CategoriaRepository;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 
+@Service
 public class CategoriaService {
 
 	 @Autowired

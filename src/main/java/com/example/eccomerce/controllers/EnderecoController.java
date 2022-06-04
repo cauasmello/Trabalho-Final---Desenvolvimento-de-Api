@@ -2,6 +2,7 @@ package com.example.eccomerce.controllers;
 
 import com.example.eccomerce.exceptions.GeneralException;
 import com.example.eccomerce.models.EnderecoModel;
+import com.example.eccomerce.models.ViaCepModel;
 import com.example.eccomerce.services.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -36,7 +38,7 @@ public class EnderecoController {
     }
 
     @PostMapping
-    public ResponseEntity<String> add(@RequestBody EnderecoModel endereco) throws GeneralException {
+    public ResponseEntity<String> add(@Valid @RequestBody ViaCepModel endereco) throws GeneralException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Adicionado");
 
@@ -45,7 +47,7 @@ public class EnderecoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> put(@RequestBody EnderecoModel endereco, @PathVariable Integer id) throws GeneralException {
+    public ResponseEntity<String> put(@Valid @RequestBody EnderecoModel endereco, @PathVariable Integer id) throws GeneralException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Atualizado");
 

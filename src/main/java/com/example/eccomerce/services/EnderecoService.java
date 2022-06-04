@@ -22,7 +22,6 @@ public class EnderecoService {
 
     public List<EnderecoModel> getAll() {
         List<EnderecoModel> list = repository.findAll();
-        System.out.println(list);
         return list;
     }
 
@@ -34,24 +33,25 @@ public class EnderecoService {
         return optional.get();
     }
 
-    public String add(EnderecoModel endereco) throws GeneralException {
-        if(endereco.getCep() == null){
+    public String add(ViaCepModel viacep) throws GeneralException {
+        if(viacep.getCep() == null){
             throw new GeneralException("CEP Invalido");
         }
 
-        if(endereco.getNumero() == null){
+        if(viacep.getNumero() == null){
             throw new GeneralException("Numero Invalido");
         }
 
-        if(endereco.getComplemento() == null){
+        if(viacep.getComplemento() == null){
             throw new GeneralException("Complemento Invalido");
         }
 
-        ViaCepModel novoEndereco = viaCep.getViaCep(endereco.getCep());
-        endereco.setRua(novoEndereco.getLogradouro());
-        endereco.setCidade(novoEndereco.getLocalidade());
-        endereco.setEstado(novoEndereco.getUf());
-        endereco.setBairro(novoEndereco.getBairro());
+        ViaCepModel buscarEndereco = viaCep.getViaCep(viacep.getCep());
+        buscarEndereco.setNumero(viacep.getNumero());
+        buscarEndereco.setComplemento(viacep.getComplemento());
+        buscarEndereco.setCep(viacep.getCep());
+
+        EnderecoModel endereco = new EnderecoModel(buscarEndereco, null);
 
         repository.save(endereco);
         return "Criado com sucesso!";
