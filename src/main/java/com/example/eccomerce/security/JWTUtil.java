@@ -17,7 +17,7 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
-	private static String secret = "Serratec";
+	private static String secret = "59ccd823b8ebc9b35b548f5ca07be7db";
 
 	private static int expiration = 60000;
 
