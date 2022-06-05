@@ -101,12 +101,4 @@ public class UserController {
         return new ResponseEntity<>(service.deleteFuncionario(id), headers, HttpStatus.OK);
     }
 
-    @PostMapping("/logar")
-    public ResponseEntity<Void> login(@Valid @RequestBody UserModel user) throws ErrorException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Success", "Logado com sucesso!");
-
-        return new ResponseEntity<>(service.login(user), headers, HttpStatus.CREATED);
-    }
-
 }

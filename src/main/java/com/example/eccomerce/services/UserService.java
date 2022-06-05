@@ -201,8 +201,4 @@ public class UserService {
         }
         return optional.get();
     }
-
-    public Void login(UserModel user) {
-        return null;
-    }
 }

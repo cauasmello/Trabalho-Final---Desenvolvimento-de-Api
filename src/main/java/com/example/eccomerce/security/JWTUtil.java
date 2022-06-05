@@ -1,10 +1,11 @@
 package com.example.eccomerce.security;
 
+import com.example.eccomerce.exceptions.ErrorException;
+import com.example.eccomerce.models.UserModel;
 import com.example.eccomerce.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -16,11 +17,9 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
-	@Value("${jwt.secret}")
-	private String secret;
+	private static String secret = "Serratec";
 
-	@Value("${jwt.expiration}")
-	private Long expiration;
+	private static int expiration = 60000;
 
 	@Autowired
 	UserService service;
@@ -30,24 +29,29 @@ public class JWTUtil {
 				.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
 	}
 
-	public static Authentication getAuthentication(HttpServletRequest request) {
+	public static Authentication getAuthentication(HttpServletRequest request) throws ErrorException {
 		String token = request.getHeader("Authorization");
 		if (token != null) {
-			String user = Jwts.parser().setSigningKey("serratec".getBytes()).parseClaimsJws(token.replace("Bearer", ""))
-					.getBody().getSubject();
-			if (user != null) {
-				return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+			try{
+				String user = Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token.replace("Bearer", ""))
+						.getBody().getSubject();
+
+				if (user != null) {
+					return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+				}
+			}catch (Exception e){
+				throw new ErrorException("JWT expired");
 			}
 		}
 		return null;
 	}
 
-	public Integer getCreditials(String token) {
+	public UserModel getCreditials(String token) {
 		if (token != null) {
-			String user = Jwts.parser().setSigningKey("serratec".getBytes()).parseClaimsJws(token.replace("Bearer", ""))
+			String user = Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token.replace("Bearer", ""))
 					.getBody().getSubject();
 			if (user != null) {
-				return service.getUser(user).getRole();
+				return service.getUser(user);
 			}
 		}
 		return null;
