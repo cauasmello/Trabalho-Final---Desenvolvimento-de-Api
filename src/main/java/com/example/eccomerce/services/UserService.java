@@ -8,6 +8,7 @@ import com.example.eccomerce.repositories.FuncionarioRepository;
 import com.example.eccomerce.repositories.UserRepository;
 import com.example.eccomerce.resources.ViaCepResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,9 @@ public class UserService {
 
     @Autowired
     ViaCepResource viaCep;
+
+    @Autowired
+    BCryptPasswordEncoder bCrypt;
 
     public List<UserModel> getAllCliente() {
         return userRepository.findByRole(0);
@@ -63,6 +67,7 @@ public class UserService {
         }
 
         UserModel userModel = new UserModel(user);
+        userModel.setSenha(bCrypt.encode(userModel.getSenha()));
 
         ClienteModel clienteModel = new ClienteModel(user, userModel);
 
@@ -97,7 +102,7 @@ public class UserService {
         }
 
         if(!user.getSenha().equals("") && user.getSenha() != null){
-            userToUpdate.setSenha(user.getSenha());
+            userToUpdate.setSenha(bCrypt.encode(user.getSenha()));
         }
 
         userRepository.save(userToUpdate);
@@ -141,6 +146,7 @@ public class UserService {
         }
 
         UserModel userModel = new UserModel(user);
+        userModel.setSenha(bCrypt.encode(userModel.getSenha()));
 
         FuncionarioModel funcionarioModel = new FuncionarioModel(user, userModel);
 
@@ -172,7 +178,7 @@ public class UserService {
         }
 
         if(!user.getSenha().equals("") && user.getSenha() != null){
-            userToUpdate.setSenha(user.getSenha());
+            userToUpdate.setSenha(bCrypt.encode(user.getSenha()));
         }
 
         userRepository.save(userToUpdate);
@@ -186,6 +192,14 @@ public class UserService {
         }
         userRepository.deleteById(id);
         return null;
+    }
+
+    public UserModel getUser(String username){
+        Optional<UserModel> optional = userRepository.findByUsername(username);
+        if (optional.isEmpty()) {
+            return null;
+        }
+        return optional.get();
     }
 
     public Void login(UserModel user) {

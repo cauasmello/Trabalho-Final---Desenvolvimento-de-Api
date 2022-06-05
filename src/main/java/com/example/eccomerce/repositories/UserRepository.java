@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
-    @Query("SELECT C FROM UserModel C where C.username=:username") List<UserModel>
+    @Query("SELECT C FROM UserModel C where C.username=:username") Optional<UserModel>
     findByUsername (@Param("username") String username);
 
-    @Query("SELECT C FROM UserModel C where C.email=:email") List<UserModel>
+    @Query("SELECT C FROM UserModel C where C.email=:email") Optional<UserModel>
     findByEmail (@Param("email") String email);
 
     @Query("SELECT count(C) FROM UserModel C where C.email=:email or C.username=:username")
