@@ -1,26 +1,22 @@
 package com.example.eccomerce.models;
 
-import com.example.eccomerce.resources.ViaCepResource;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
-import java.time.LocalDate;
 
 public class ClienteDTOModel {
 
     private String email;
     private String username;
     private String senha;
-    private Integer role;
+    private Integer role = 0;
 
     private String nome;
     private Long cpf;
     private Long telefone;
-    private LocalDate nascimento;
+    private String nascimento;
 
-    private String cep;
-    private String numero;
+    private Long cep;
+    private Integer numero;
     private String complemento;
 
     private String rua;
@@ -28,19 +24,15 @@ public class ClienteDTOModel {
     private String cidade;
     private String estado;
 
-    @Autowired
-    ViaCepResource viaCep;
-
     public ClienteDTOModel() {
         super();
     }
 
-    public ClienteDTOModel(@NotNull String email, @NotNull String username, @NotNull String senha, @NotNull String nome, @NotNull Long cpf, @NotNull Long telefone, @NotNull LocalDate nascimento, @NotNull String cep, @NotNull String numero, @NotNull String complemento) {
+    public ClienteDTOModel(@NotNull String email, @NotNull String username, @NotNull String senha, @NotNull String nome, @NotNull Long cpf, @NotNull Long telefone, @NotNull String nascimento, @NotNull Long cep, @NotNull Integer numero, @NotNull String complemento) {
         super();
         this.email = email;
         this.username = username;
         this.senha = senha;
-        this.role = 0;
 
         this.nome = nome;
         this.cpf = cpf;
@@ -50,17 +42,13 @@ public class ClienteDTOModel {
         this.cep = cep;
         this.numero = numero;
         this.complemento = complemento;
-
-        assert false;
-        ViaCepModel viaCepModel = this.viaCep.getViaCep(cep);
-        this.setViaCep(viaCepModel.getLogradouro(), viaCepModel.getBairro(), viaCepModel.getLocalidade(), viaCepModel.getUf());
     }
 
-    public void setViaCep(@NotNull String rua, @NotNull String bairro, @NotNull String cidade, @NotNull String estado){
-        this.rua = rua;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
+    public void setViaCep(ViaCepModel viaCepModel){
+        this.rua = viaCepModel.getLogradouro();
+        this.bairro = viaCepModel.getBairro();
+        this.cidade = viaCepModel.getLocalidade();
+        this.estado = viaCepModel.getUf();
     }
 
     public String getEmail() {
@@ -91,11 +79,11 @@ public class ClienteDTOModel {
         return telefone;
     }
 
-    public LocalDate getNascimento() {
+    public String getNascimento() {
         return nascimento;
     }
 
-    public String getCep() {
+    public Long getCep() {
         return cep;
     }
 
@@ -111,7 +99,7 @@ public class ClienteDTOModel {
         return cidade;
     }
 
-    public String getNumero() {
+    public Integer getNumero() {
         return numero;
     }
 

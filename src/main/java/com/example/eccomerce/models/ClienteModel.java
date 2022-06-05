@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -59,9 +60,11 @@ public class ClienteModel {
 
     public ClienteModel(ClienteDTOModel clienteDTO, UserModel user) {
         super();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+
         this.nome = clienteDTO.getNome();
         this.cpf = clienteDTO.getCpf();
-        this.nascimento = clienteDTO.getNascimento();
+        this.nascimento = LocalDate.parse(clienteDTO.getNascimento(), formatter);
         this.telefone = clienteDTO.getTelefone();
         this.user = user;
     }

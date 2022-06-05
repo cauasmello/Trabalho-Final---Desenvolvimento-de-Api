@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.eccomerce.exceptions.GeneralException;
+import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.ClienteModel;
-import com.example.eccomerce.models.ClienteModel;
-import com.example.eccomerce.services.ClienteService;
 import com.example.eccomerce.services.ClienteService;
 
 @RestController
@@ -37,7 +35,7 @@ public class ClienteController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteModel> get(@PathVariable Integer id) throws GeneralException {
+    public ResponseEntity<ClienteModel> get(@PathVariable Integer id) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Seu endereço");
 
@@ -45,7 +43,7 @@ public class ClienteController {
     }
     
     @PostMapping
-    public ResponseEntity<String> add(@RequestBody ClienteModel cliente) throws GeneralException {
+    public ResponseEntity<String> add(@RequestBody ClienteModel cliente) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Adicionado");
 
@@ -54,7 +52,7 @@ public class ClienteController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<String> put(@RequestBody ClienteModel cliente, @PathVariable Integer id) throws GeneralException {
+    public ResponseEntity<String> put(@RequestBody ClienteModel cliente, @PathVariable Integer id) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Atualizado");
 
@@ -62,7 +60,7 @@ public class ClienteController {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) throws GeneralException {
+    public ResponseEntity<String> delete(@PathVariable Integer id) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Deletado");
 

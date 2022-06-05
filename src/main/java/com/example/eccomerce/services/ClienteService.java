@@ -7,12 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.eccomerce.exceptions.GeneralException;
+import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.ClienteModel;
-import com.example.eccomerce.models.EnderecoModel;
-import com.example.eccomerce.models.ViaCepModel;
 import com.example.eccomerce.repositories.ClienteRepository;
-import com.example.eccomerce.repositories.EnderecoRepository;
 import com.example.eccomerce.resources.ViaCepResource;
 
 @Service
@@ -28,19 +25,19 @@ public class ClienteService {
 	        System.out.println(list);
 	        return list;
 }
-	    public ClienteModel get(Integer id) throws GeneralException {
+	    public ClienteModel get(Integer id) throws ErrorException {
 	        Optional<ClienteModel> optional = repositorio.findById(id);
 	        if (optional.isEmpty()) {
-	            throw new GeneralException("Cliente não existe!");
+	            throw new ErrorException("Cliente não existe!");
 	        }
 	        return optional.get();
 	    }
 	    
-	    public String add(@NotNull ClienteModel cliente) throws GeneralException {
+	    public String add(@NotNull ClienteModel cliente) throws ErrorException {
 	        if(cliente.getId() != null){
 	        	Optional<ClienteModel> optional = repositorio.findById(cliente.getId());	           
 	        	if (optional.isPresent()) {
-	                throw new GeneralException("Cliente já existe!");
+	                throw new ErrorException("Cliente já existe!");
 	            }
 	        }
 	        
@@ -48,10 +45,10 @@ public class ClienteService {
 	        return "Criado com sucesso!";
 	    }
 	        	
-	        	 public String put(ClienteModel clienteNew, Integer id) throws GeneralException {
+	        	 public String put(ClienteModel clienteNew, Integer id) throws ErrorException {
 	        	        Optional<ClienteModel> optional = repositorio.findById(id);
 	        	        if (optional.isEmpty()) {
-	        	            throw new GeneralException("Cliente não existe!");
+	        	            throw new ErrorException("Cliente não existe!");
 	        	        }
 	        	        ClienteModel cliente = optional.get();
 
@@ -78,10 +75,10 @@ public class ClienteService {
 	        	        return "Cliente Atualizado";
 	        	 }
 	        	 
-	        	 public String delete(Integer id) throws GeneralException {
+	        	 public String delete(Integer id) throws ErrorException {
 	        	        Optional<ClienteModel> optional = repositorio.findById(id);
 	        	        if (optional.isEmpty()) {
-	        	            throw new GeneralException("Cliente não existe!");
+	        	            throw new ErrorException("Cliente não existe!");
 	        	        }
 	        	        repositorio.deleteById(id);
 	        	        return "Deletado com sucesso";

@@ -1,6 +1,6 @@
 package com.example.eccomerce.services;
 
-import com.example.eccomerce.exceptions.GeneralException;
+import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.CategoriaModel;
 import com.example.eccomerce.repositories.CategoriaRepository;
 import org.jetbrains.annotations.NotNull;
@@ -22,29 +22,29 @@ public class CategoriaService {
 	        return list;
 	    }
 
-	    public CategoriaModel get(Integer id) throws GeneralException {
+	    public CategoriaModel get(Integer id) throws ErrorException {
 	        Optional<CategoriaModel> optional = repositorio.findById(id);
 	        if (optional.isEmpty()) {
-	            throw new GeneralException("Categoria não existe!");
+	            throw new ErrorException("Categoria não existe!");
 	        }
 	        return optional.get();
 	    }
 
-	    public String add(@NotNull CategoriaModel categoria) throws GeneralException {
+	    public String add(@NotNull CategoriaModel categoria) throws ErrorException {
 	        if(categoria.getId() != null){
 	            Optional<CategoriaModel> optional = repositorio.findById(categoria.getId());
 	            if (optional.isPresent()) {
-	                throw new GeneralException("Categoria já existe!");
+	                throw new ErrorException("Categoria já existe!");
 	            }
 	        }
 	        repositorio.save(categoria);
 	        return "Criado com sucesso!";
 	    }
 
-	    public String put(CategoriaModel categoriaNew, Integer id) throws GeneralException {
+	    public String put(CategoriaModel categoriaNew, Integer id) throws ErrorException {
 	        Optional<CategoriaModel> optional = repositorio.findById(id);
 	        if (optional.isEmpty()) {
-	            throw new GeneralException("Categoria não existe!");
+	            throw new ErrorException("Categoria não existe!");
 	        }
 	        CategoriaModel categoria = optional.get();
 
@@ -60,10 +60,10 @@ public class CategoriaService {
 
 	    }
 
-	    public String delete(Integer id) throws GeneralException {
+	    public String delete(Integer id) throws ErrorException {
 	        Optional<CategoriaModel> optional = repositorio.findById(id);
 	        if (optional.isEmpty()) {
-	            throw new GeneralException("Categoria não existe!");
+	            throw new ErrorException("Categoria não existe!");
 	        }
 	        repositorio.deleteById(id);
 	        return "Categoria com sucesso";

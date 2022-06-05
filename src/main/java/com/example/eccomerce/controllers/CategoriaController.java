@@ -1,24 +1,15 @@
 package com.example.eccomerce.controllers;
 
-import java.util.List;
-
+import com.example.eccomerce.exceptions.ErrorException;
+import com.example.eccomerce.models.CategoriaModel;
+import com.example.eccomerce.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.eccomerce.exceptions.GeneralException;
-import com.example.eccomerce.models.CategoriaModel;
-import com.example.eccomerce.models.EnderecoModel;
-import com.example.eccomerce.services.CategoriaService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/categoria")
@@ -36,7 +27,7 @@ public class CategoriaController {
 	    }
 
 	    @GetMapping("/{id}")
-	    public ResponseEntity<CategoriaModel> get(@PathVariable Integer id) throws GeneralException {
+	    public ResponseEntity<CategoriaModel> get(@PathVariable Integer id) throws ErrorException {
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.add("Status", "Sua categoria");
 
@@ -44,7 +35,7 @@ public class CategoriaController {
 	    }
 
 	    @PostMapping
-	    public ResponseEntity<String> add(@RequestBody CategoriaModel categoria) throws GeneralException {
+	    public ResponseEntity<String> add(@RequestBody CategoriaModel categoria) throws ErrorException {
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.add("Status", "Adicionado");
 
@@ -53,7 +44,7 @@ public class CategoriaController {
 	    }
 
 	    @PutMapping("/{id}")
-	    public ResponseEntity<String> put(@RequestBody CategoriaModel categoria, @PathVariable Integer id) throws GeneralException {
+	    public ResponseEntity<String> put(@RequestBody CategoriaModel categoria, @PathVariable Integer id) throws ErrorException {
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.add("Status", "Atualizado");
 
@@ -61,7 +52,7 @@ public class CategoriaController {
 	    }
 
 	    @DeleteMapping("/{id}")
-	    public ResponseEntity<String> delete(@PathVariable Integer id) throws GeneralException {
+	    public ResponseEntity<String> delete(@PathVariable Integer id) throws ErrorException {
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.add("Status", "Deletado");
 

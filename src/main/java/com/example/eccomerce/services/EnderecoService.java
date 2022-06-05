@@ -1,6 +1,6 @@
 package com.example.eccomerce.services;
 
-import com.example.eccomerce.exceptions.GeneralException;
+import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.EnderecoModel;
 import com.example.eccomerce.models.ViaCepModel;
 import com.example.eccomerce.repositories.EnderecoRepository;
@@ -25,25 +25,25 @@ public class EnderecoService {
         return list;
     }
 
-    public EnderecoModel get(Integer id) throws GeneralException {
+    public EnderecoModel get(Integer id) throws ErrorException {
         Optional<EnderecoModel> optional = repository.findById(id);
         if (optional.isEmpty()) {
-            throw new GeneralException("Endereço não existe!");
+            throw new ErrorException("Endereço não existe!");
         }
         return optional.get();
     }
 
-    public String add(ViaCepModel viacep) throws GeneralException {
+    public String add(ViaCepModel viacep) throws ErrorException {
         if(viacep.getCep() == null){
-            throw new GeneralException("CEP Invalido");
+            throw new ErrorException("CEP Invalido");
         }
 
         if(viacep.getNumero() == null){
-            throw new GeneralException("Numero Invalido");
+            throw new ErrorException("Numero Invalido");
         }
 
         if(viacep.getComplemento() == null){
-            throw new GeneralException("Complemento Invalido");
+            throw new ErrorException("Complemento Invalido");
         }
 
         ViaCepModel buscarEndereco = viaCep.getViaCep(viacep.getCep());
@@ -57,14 +57,14 @@ public class EnderecoService {
         return "Criado com sucesso!";
     }
 
-    public String put(EnderecoModel enderecoNew, Integer id) throws GeneralException {
+    public String put(EnderecoModel enderecoNew, Integer id) throws ErrorException {
         Optional<EnderecoModel> optional = repository.findById(id);
         if (optional.isEmpty()) {
-            throw new GeneralException("Endereço não existe!");
+            throw new ErrorException("Endereço não existe!");
         }
         EnderecoModel endereco = optional.get();
 
-        if (enderecoNew.getCep() != null && !enderecoNew.getCep().equals("")) {
+        if (enderecoNew.getCep() != null) {
             endereco.setCep(enderecoNew.getCep());
         }
 
@@ -80,7 +80,7 @@ public class EnderecoService {
             endereco.setCidade(enderecoNew.getCidade());
         }
 
-        if (enderecoNew.getNumero() != null && !enderecoNew.getNumero().equals("")) {
+        if (enderecoNew.getNumero() != null) {
             endereco.setNumero(enderecoNew.getNumero());
         }
 
@@ -96,10 +96,10 @@ public class EnderecoService {
 
     }
 
-    public String delete(Integer id) throws GeneralException {
+    public String delete(Integer id) throws ErrorException {
         Optional<EnderecoModel> optional = repository.findById(id);
         if (optional.isEmpty()) {
-            throw new GeneralException("Endereço não existe!");
+            throw new ErrorException("Endereço não existe!");
         }
         repository.deleteById(id);
         return "Deletado com sucesso";

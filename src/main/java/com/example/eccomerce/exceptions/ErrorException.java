@@ -1,10 +1,10 @@
 package com.example.eccomerce.exceptions;
 
-public class GeneralException extends Exception {
+public class ErrorException extends Exception {
 
     private String message;
 
-    public GeneralException(String message) {
+    public ErrorException(String message) {
         super();
         this.message = message;
     }

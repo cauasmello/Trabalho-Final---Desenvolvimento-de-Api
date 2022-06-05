@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -55,10 +56,12 @@ public class FuncionarioModel {
 
     public FuncionarioModel(FuncionarioDTOModel funcionario, UserModel user) {
         super();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+
         this.nome = funcionario.getNome();
         this.cpf = funcionario.getCpf();
         this.telefone = funcionario.getTelefone();
-        this.nascimento = funcionario.getNascimento();
+        this.nascimento = LocalDate.parse(funcionario.getNascimento(), formatter);
         this.user = user;
     }
 

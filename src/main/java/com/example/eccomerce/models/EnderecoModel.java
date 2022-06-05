@@ -16,7 +16,7 @@ public class EnderecoModel {
 
     @NotNull
     @Column(name = "cep")
-    private String cep;
+    private Long cep;
 
     @NotNull
     @Column(name = "rua")
@@ -32,7 +32,7 @@ public class EnderecoModel {
 
     @NotNull
     @Column(name = "numero")
-    private String numero;
+    private Integer numero;
 
     @NotNull
     @Column(name = "complemento")
@@ -51,7 +51,7 @@ public class EnderecoModel {
         super();
     }
 
-    public EnderecoModel(Integer id, String cep, String rua, String bairro, String cidade, String numero, String complemento, String estado, ClienteModel cliente) {
+    public EnderecoModel(Integer id, Long cep, String rua, String bairro, String cidade, Integer numero, String complemento, String estado, ClienteModel cliente) {
         super();
         this.id = id;
         this.cep = cep;
@@ -66,11 +66,11 @@ public class EnderecoModel {
 
     public EnderecoModel(ViaCepModel viaCep, ClienteModel cliente) {
         super();
-        this.cep = viaCep.getCep();
+        this.cep = Long.parseLong(viaCep.getCep());
         this.rua = viaCep.getLogradouro();
         this.bairro = viaCep.getBairro();
         this.cidade = viaCep.getLocalidade();
-        this.numero = viaCep.getNumero();
+        this.numero = Integer.parseInt(viaCep.getNumero());
         this.complemento = viaCep.getComplemento();
         this.estado = viaCep.getUf();
         this.cliente = cliente;
@@ -93,12 +93,12 @@ public class EnderecoModel {
     }
 
 
-    public String getCep() {
+    public Long getCep() {
         return cep;
     }
 
 
-    public void setCep(String cep) {
+    public void setCep(Long cep) {
         this.cep = cep;
     }
 
@@ -133,12 +133,12 @@ public class EnderecoModel {
     }
 
 
-    public String getNumero() {
+    public Integer getNumero() {
         return numero;
     }
 
 
-    public void setNumero(String numero) {
+    public void setNumero(Integer numero) {
         this.numero = numero;
     }
 

@@ -1,30 +1,28 @@
 package com.example.eccomerce.models;
 
 import java.lang.reflect.Field;
-import java.time.LocalDate;
 
 public class FuncionarioDTOModel {
 
     private String email;
     private String username;
     private String senha;
-    private Integer role;
+    private Integer role = 1;
 
     private String nome;
     private Long cpf;
     private Long telefone;
-    private LocalDate nascimento;
+    private String nascimento;
 
     public FuncionarioDTOModel() {
         super();
     }
 
-    public FuncionarioDTOModel(String email, String username, String senha, String nome, Long cpf, Long telefone, LocalDate nascimento) {
+    public FuncionarioDTOModel(String email, String username, String senha, String nome, Long cpf, Long telefone, String nascimento) {
         super();
         this.email = email;
         this.username = username;
         this.senha = senha;
-        this.role = 1;
 
         this.nome = nome;
         this.cpf = cpf;
@@ -60,7 +58,7 @@ public class FuncionarioDTOModel {
         return telefone;
     }
 
-    public LocalDate getNascimento() {
+    public String getNascimento() {
         return nascimento;
     }
 

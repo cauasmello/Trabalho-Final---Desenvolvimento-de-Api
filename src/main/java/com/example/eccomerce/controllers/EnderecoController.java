@@ -1,6 +1,6 @@
 package com.example.eccomerce.controllers;
 
-import com.example.eccomerce.exceptions.GeneralException;
+import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.EnderecoModel;
 import com.example.eccomerce.models.ViaCepModel;
 import com.example.eccomerce.services.EnderecoService;
@@ -30,7 +30,7 @@ public class EnderecoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EnderecoModel> get(@PathVariable Integer id) throws GeneralException {
+    public ResponseEntity<EnderecoModel> get(@PathVariable Integer id) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Seu endereço");
 
@@ -38,7 +38,7 @@ public class EnderecoController {
     }
 
     @PostMapping
-    public ResponseEntity<String> add(@Valid @RequestBody ViaCepModel endereco) throws GeneralException {
+    public ResponseEntity<String> add(@Valid @RequestBody ViaCepModel endereco) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Adicionado");
 
@@ -47,7 +47,7 @@ public class EnderecoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> put(@Valid @RequestBody EnderecoModel endereco, @PathVariable Integer id) throws GeneralException {
+    public ResponseEntity<String> put(@Valid @RequestBody EnderecoModel endereco, @PathVariable Integer id) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Atualizado");
 
@@ -55,7 +55,7 @@ public class EnderecoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) throws GeneralException {
+    public ResponseEntity<String> delete(@PathVariable Integer id) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Deletado");
 
