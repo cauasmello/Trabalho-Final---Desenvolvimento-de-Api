@@ -45,7 +45,7 @@ public class ProdutoModel {
     @JoinColumn(name = "funcionario_id", referencedColumnName = "id")
     private FuncionarioModel funcionario;
 
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoProdutoModel> pedidos;
 
     public ProdutoModel() {

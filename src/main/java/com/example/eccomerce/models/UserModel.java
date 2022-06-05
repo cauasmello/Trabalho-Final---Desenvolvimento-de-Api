@@ -28,11 +28,11 @@ public class UserModel {
     private Integer role;
 
     @JsonIgnore
-    @OneToOne(mappedBy="user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ClienteModel cliente;
 
     @JsonIgnore
-    @OneToOne(mappedBy="user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
     private FuncionarioModel funcionario;
 
     public UserModel() {

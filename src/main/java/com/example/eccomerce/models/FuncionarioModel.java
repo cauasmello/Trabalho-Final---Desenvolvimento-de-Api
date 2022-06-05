@@ -36,7 +36,7 @@ public class FuncionarioModel {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserModel user;
 
-    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdutoModel> produtos;
 
     public FuncionarioModel() {
@@ -107,5 +107,13 @@ public class FuncionarioModel {
 
     public void setUser(UserModel user) {
         this.user = user;
+    }
+
+    public List<ProdutoModel> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<ProdutoModel> produtos) {
+        this.produtos = produtos;
     }
 }

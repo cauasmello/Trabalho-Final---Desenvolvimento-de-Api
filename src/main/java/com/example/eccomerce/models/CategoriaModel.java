@@ -19,7 +19,7 @@ public class CategoriaModel {
 	@Column(name = "descricao")
     private String descricao;
 
-	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProdutoModel> produtos;
 
     public CategoriaModel() {
