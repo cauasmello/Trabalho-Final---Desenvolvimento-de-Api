@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -34,8 +35,12 @@ public class UserService {
         return userRepository.findByRole(0);
     }
 
-    public List<UserModel> getAllFuncionario() {
-        return userRepository.findByRole(1);
+    public UserModel getClienteById(Integer id) throws ErrorException {
+        Optional<UserModel> optional = userRepository.findClienteById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Cliente não existe!");
+        }
+        return optional.get();
     }
 
     public Void createCliente(ClienteDTOModel user) throws ErrorException {
@@ -54,8 +59,9 @@ public class UserService {
 
         Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
         if (existUser > 0) {
-            throw new ErrorException("Usuario já existe");
+            throw new ErrorException("Email ou Username já existe");
         }
+
         UserModel userModel = new UserModel(user);
 
         ClienteModel clienteModel = new ClienteModel(user, userModel);
@@ -69,6 +75,57 @@ public class UserService {
         return null;
     }
 
+    public Void updateCliente(UserModel user, Integer id) throws ErrorException {
+        Optional<UserModel> optional = userRepository.findClienteById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
+        if (existUser > 0) {
+            throw new ErrorException("Email ou Username já existe");
+        }
+
+        UserModel userToUpdate = optional.get();
+
+        if(!user.getEmail().equals("") && user.getEmail() != null){
+            userToUpdate.setEmail(user.getEmail());
+        }
+
+        if(!user.getUsername().equals("") && user.getUsername() != null){
+            userToUpdate.setUsername(user.getUsername());
+        }
+
+        if(!user.getSenha().equals("") && user.getSenha() != null){
+            userToUpdate.setSenha(user.getSenha());
+        }
+
+        userRepository.save(userToUpdate);
+
+        return null;
+    }
+
+    public Void deleteCliente(Integer id) throws ErrorException {
+        Optional<UserModel> optional = userRepository.findClienteById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Cliente não existe!");
+        }
+        userRepository.deleteById(id);
+        return null;
+    }
+
+    public List<UserModel> getAllFuncionario() {
+        return userRepository.findByRole(1);
+    }
+
+    public UserModel getFuncionarioById(Integer id) throws ErrorException {
+        Optional<UserModel> optional = userRepository.findFuncionarioById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Funcionario não existe!");
+        }
+        return optional.get();
+    }
+
     public Void createFuncionario(FuncionarioDTOModel user) throws ErrorException {
         try {
             if(user.isNull()){
@@ -79,8 +136,8 @@ public class UserService {
         }
 
         Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
-        if(existUser > 0){
-            throw new ErrorException("Usuario já existe");
+        if (existUser > 0) {
+            throw new ErrorException("Email ou Username já existe");
         }
 
         UserModel userModel = new UserModel(user);
@@ -90,6 +147,44 @@ public class UserService {
         userRepository.save(userModel);
         funcionarioRepository.save(funcionarioModel);
 
+        return null;
+    }
+
+    public Void updateFuncionario(UserModel user, Integer id) throws ErrorException {
+        Optional<UserModel> optional = userRepository.findFuncionarioById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Funcionario não existe!");
+        }
+
+        Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
+        if (existUser > 0) {
+            throw new ErrorException("Email ou Username já existe");
+        }
+
+        UserModel userToUpdate = optional.get();
+
+        if(!user.getEmail().equals("") && user.getEmail() != null){
+            userToUpdate.setEmail(user.getEmail());
+        }
+
+        if(!user.getUsername().equals("") && user.getUsername() != null){
+            userToUpdate.setUsername(user.getUsername());
+        }
+
+        if(!user.getSenha().equals("") && user.getSenha() != null){
+            userToUpdate.setSenha(user.getSenha());
+        }
+
+        userRepository.save(userToUpdate);
+        return null;
+    }
+
+    public Void deleteFuncionario(Integer id) throws ErrorException {
+        Optional<UserModel> optional = userRepository.findFuncionarioById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Funcionario não existe!");
+        }
+        userRepository.deleteById(id);
         return null;
     }
 

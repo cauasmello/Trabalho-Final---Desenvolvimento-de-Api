@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
@@ -20,4 +21,11 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
     @Query("SELECT C FROM UserModel C where C.role=:role")
     List<UserModel> findByRole (@Param("role") Integer role);
+
+    @Query("SELECT C FROM UserModel C where C.id=:id and C.role = 0") Optional<UserModel>
+    findClienteById (@Param("id") Integer id);
+
+    @Query("SELECT C FROM UserModel C where C.id=:id and C.role = 1") Optional<UserModel>
+    findFuncionarioById (@Param("id") Integer id);
+
 }
