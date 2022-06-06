@@ -46,7 +46,6 @@ public class FuncionarioService {
         return optional.get();
     }
 
-
     public Void put(FuncionarioDTOModel funcionarioNew, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
