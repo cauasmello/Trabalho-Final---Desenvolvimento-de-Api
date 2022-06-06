@@ -14,31 +14,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.eccomerce.exceptions.ErrorException;
-import com.example.eccomerce.models.ClienteDTOModel;
-import com.example.eccomerce.models.ClienteModel;
-import com.example.eccomerce.services.ClienteService;
+import com.example.eccomerce.models.FuncionarioDTOModel;
+import com.example.eccomerce.models.FuncionarioModel;
+import com.example.eccomerce.services.FuncionarioService;
 
 @RestController
-@RequestMapping("/cliente")
-public class ClienteController {
+@RequestMapping("/funcionario")
+public class FuncionarioController {
 	
 	@Autowired
-    ClienteService service;
+    FuncionarioService service;
 
     @GetMapping
-    public ResponseEntity<ClienteModel> get(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+    public ResponseEntity<FuncionarioModel> get(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Cliente");
+        headers.add("Status", "Funcionario");
 
         return new ResponseEntity<>(service.get(token), headers, HttpStatus.ACCEPTED);
     }
     
     @PutMapping()
-    public ResponseEntity<Void> put(@Valid @RequestBody ClienteDTOModel cliente, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+    public ResponseEntity<Void> put(@Valid @RequestBody FuncionarioDTOModel funcionario, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Atualizado");
 
-        return new ResponseEntity<>(service.put(cliente, token), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.put(funcionario, token), headers, HttpStatus.OK);
     }
+
 
 }
