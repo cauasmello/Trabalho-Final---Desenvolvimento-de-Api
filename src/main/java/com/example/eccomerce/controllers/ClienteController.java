@@ -20,7 +20,7 @@ public class ClienteController {
     @GetMapping
     public ResponseEntity<ClienteModel> get(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Seu endereço");
+        headers.add("Success", "Seu endereço");
 
         return new ResponseEntity<>(service.get(token), headers, HttpStatus.ACCEPTED);
     }
@@ -28,7 +28,7 @@ public class ClienteController {
     @PutMapping()
     public ResponseEntity<Void> put(@RequestBody ClienteDTOModel cliente, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Atualizado");
+        headers.add("Success", "Atualizado");
 
         return new ResponseEntity<>(service.put(cliente, token), headers, HttpStatus.OK);
     }

@@ -124,17 +124,13 @@ public class UserService {
         return optional.get();
     }
 
-    public Void createCliente(ClienteDTOModel user) throws ErrorException {
+    public Void createCliente(ClienteDTOModel user) throws ErrorException, IllegalAccessException {
         if(user.getCep() != null){
             ViaCepModel viaCepModel = this.viaCep.getViaCep(user.getCep().toString());
             user.setViaCep(viaCepModel);
         }
 
-        try {
-            if(user.isNull()){
-                throw new ErrorException("Parametros invalido");
-            }
-        } catch (Exception e) {
+        if(user.isNull()){
             throw new ErrorException("Parametros invalido");
         }
 

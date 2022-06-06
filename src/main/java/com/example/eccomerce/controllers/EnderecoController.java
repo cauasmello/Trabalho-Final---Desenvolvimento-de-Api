@@ -24,7 +24,7 @@ public class EnderecoController {
     @GetMapping
     public ResponseEntity<List<EnderecoModel>> getAll(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Lista dos seus endereços");
+        headers.add("Success", "Lista dos seus endereços");
 
         return new ResponseEntity<>(service.getAll(token), headers, HttpStatus.ACCEPTED);
     }
@@ -32,7 +32,7 @@ public class EnderecoController {
     @GetMapping("/{id}")
     public ResponseEntity<EnderecoModel> get(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Seu endereço");
+        headers.add("Success", "Seu endereço");
 
         return new ResponseEntity<>(service.get(id, token), headers, HttpStatus.ACCEPTED);
     }
@@ -40,7 +40,7 @@ public class EnderecoController {
     @PostMapping
     public ResponseEntity<Void> add(@Valid @RequestBody ViaCepModel endereco, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException, IllegalAccessException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Adicionado");
+        headers.add("Success", "Adicionado");
 
         return new ResponseEntity<>(service.add(endereco, token), headers, HttpStatus.CREATED);
 
@@ -49,7 +49,7 @@ public class EnderecoController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> put(@Valid @RequestBody ViaCepModel endereco, @PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException, IllegalAccessException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Atualizado");
+        headers.add("Success", "Atualizado");
 
         return new ResponseEntity<>(service.put(endereco, id, token), headers, HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class EnderecoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Deletado");
+        headers.add("Success", "Deletado");
 
         return new ResponseEntity<>(service.delete(id, token), headers, HttpStatus.OK);
     }

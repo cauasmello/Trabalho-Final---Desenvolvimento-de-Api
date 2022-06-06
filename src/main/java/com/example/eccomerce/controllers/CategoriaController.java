@@ -15,48 +15,48 @@ import java.util.List;
 @RequestMapping("/categoria")
 public class CategoriaController {
 
-	 @Autowired
-	    CategoriaService service;
+    @Autowired
+    CategoriaService service;
 
-	    @GetMapping
-	    public ResponseEntity<List<CategoriaModel>> getAll() {
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("Status", "Lista das suas categorias");
+    @GetMapping
+    public ResponseEntity<List<CategoriaModel>> getAll() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Status", "Lista de categorias");
 
-	        return new ResponseEntity<>(service.getAll(), headers, HttpStatus.ACCEPTED);
-	    }
+        return new ResponseEntity<>(service.getAll(), headers, HttpStatus.ACCEPTED);
+    }
 
-	    @GetMapping("/{id}")
-	    public ResponseEntity<CategoriaModel> get(@PathVariable Integer id) throws ErrorException {
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("Status", "Sua categoria");
+    @GetMapping("/{name}")
+    public ResponseEntity<CategoriaModel> get(@PathVariable String name) throws ErrorException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Status", "Categoria");
 
-	        return new ResponseEntity<>(service.get(id), headers, HttpStatus.ACCEPTED);
-	    }
+        return new ResponseEntity<>(service.get(name), headers, HttpStatus.ACCEPTED);
+    }
 
-	    @PostMapping
-	    public ResponseEntity<String> add(@RequestBody CategoriaModel categoria) throws ErrorException {
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("Status", "Adicionado");
+    @PostMapping
+    public ResponseEntity<Void> add(@RequestBody CategoriaModel categoria, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Status", "Adicionado");
 
-	        return new ResponseEntity<>(service.add(categoria), headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.add(categoria, token), headers, HttpStatus.CREATED);
 
-	    }
+    }
 
-	    @PutMapping("/{id}")
-	    public ResponseEntity<String> put(@RequestBody CategoriaModel categoria, @PathVariable Integer id) throws ErrorException {
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("Status", "Atualizado");
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> put(@RequestBody CategoriaModel categoria, @PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Status", "Atualizado");
 
-	        return new ResponseEntity<>(service.put(categoria, id), headers, HttpStatus.OK);
-	    }
+        return new ResponseEntity<>(service.put(categoria, id, token), headers, HttpStatus.OK);
+    }
 
-	    @DeleteMapping("/{id}")
-	    public ResponseEntity<String> delete(@PathVariable Integer id) throws ErrorException {
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("Status", "Deletado");
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Status", "Deletado");
 
-	        return new ResponseEntity<>(service.delete(id), headers, HttpStatus.OK);
-	    }
+        return new ResponseEntity<>(service.delete(id, token), headers, HttpStatus.OK);
+    }
 
 }

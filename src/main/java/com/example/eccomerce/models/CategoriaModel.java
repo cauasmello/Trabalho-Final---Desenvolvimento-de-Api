@@ -1,5 +1,7 @@
 package com.example.eccomerce.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -19,6 +21,7 @@ public class CategoriaModel {
 	@Column(name = "descricao")
     private String descricao;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProdutoModel> produtos;
 

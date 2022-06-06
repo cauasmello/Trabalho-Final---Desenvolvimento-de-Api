@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCliente(@Valid @RequestBody ClienteDTOModel user) throws ErrorException {
+    public ResponseEntity<Void> createCliente(@Valid @RequestBody ClienteDTOModel user) throws ErrorException, IllegalAccessException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Success", "Criado com sucesso!");
 

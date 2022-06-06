@@ -2,8 +2,10 @@ package com.example.eccomerce.services;
 
 import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.CategoriaModel;
+import com.example.eccomerce.models.UserModel;
 import com.example.eccomerce.repositories.CategoriaRepository;
-import org.jetbrains.annotations.NotNull;
+import com.example.eccomerce.resources.ToolsResource;
+import com.example.eccomerce.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,59 +15,86 @@ import java.util.Optional;
 @Service
 public class CategoriaService {
 
-	 @Autowired
-	    CategoriaRepository repositorio;
+    @Autowired
+    CategoriaRepository repositorio;
 
-	    public List<CategoriaModel> getAll() {
-	        List<CategoriaModel> list = repositorio.findAll();
-	        System.out.println(list);
-	        return list;
-	    }
+    @Autowired
+    JWTUtil jwtUtil;
 
-	    public CategoriaModel get(Integer id) throws ErrorException {
-	        Optional<CategoriaModel> optional = repositorio.findById(id);
-	        if (optional.isEmpty()) {
-	            throw new ErrorException("Categoria não existe!");
-	        }
-	        return optional.get();
-	    }
+    @Autowired
+    ToolsResource tools;
 
-	    public String add(@NotNull CategoriaModel categoria) throws ErrorException {
-	        if(categoria.getId() != null){
-	            Optional<CategoriaModel> optional = repositorio.findById(categoria.getId());
-	            if (optional.isPresent()) {
-	                throw new ErrorException("Categoria já existe!");
-	            }
-	        }
-	        repositorio.save(categoria);
-	        return "Criado com sucesso!";
-	    }
+    public List<CategoriaModel> getAll() {
+        List<CategoriaModel> list = repositorio.findAll();
+        System.out.println(list);
+        return list;
+    }
 
-	    public String put(CategoriaModel categoriaNew, Integer id) throws ErrorException {
-	        Optional<CategoriaModel> optional = repositorio.findById(id);
-	        if (optional.isEmpty()) {
-	            throw new ErrorException("Categoria não existe!");
-	        }
-	        CategoriaModel categoria = optional.get();
+    public CategoriaModel get(String name) throws ErrorException {
+        Optional<CategoriaModel> optional = repositorio.findByNome(name);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Categoria não existe!");
+        }
+        return optional.get();
+    }
 
-	        if (categoriaNew.getNome() != null && !categoriaNew.getNome().equals("")) {
-	            categoria.setNome(categoriaNew.getNome());
-	        }
+    public Void add(CategoriaModel categoria, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
-	        if (categoriaNew.getDescricao() != null && !categoriaNew.getDescricao().equals("")) {
-	            categoria.setDescricao(categoriaNew.getDescricao());
-	        }
+        Optional<CategoriaModel> optional = repositorio.findByNome(categoria.getNome());
+        if (optional.isPresent()) {
+            throw new ErrorException("Categoria já existe!");
+        }
 
-	        return "Categoria Atualizado";
+        if(categoria.getNome() == null || categoria.getNome().equals("")){
+            throw new ErrorException("Nome Invalido");
+        }
 
-	    }
+        if(categoria.getDescricao() == null || categoria.getDescricao().equals("")){
+            throw new ErrorException("Descrição Invalida");
+        }
 
-	    public String delete(Integer id) throws ErrorException {
-	        Optional<CategoriaModel> optional = repositorio.findById(id);
-	        if (optional.isEmpty()) {
-	            throw new ErrorException("Categoria não existe!");
-	        }
-	        repositorio.deleteById(id);
-	        return "Categoria com sucesso";
-	    }
+        repositorio.save(categoria);
+        return null;
+    }
+
+    public Void put(CategoriaModel categoriaNew, Integer id, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
+
+        Optional<CategoriaModel> optional = repositorio.findById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Categoria não existe!");
+        }
+        CategoriaModel categoria = optional.get();
+
+        if (categoriaNew.getNome() != null && !categoriaNew.getNome().equals("")) {
+            categoria.setNome(categoriaNew.getNome());
+        }
+
+        if (categoriaNew.getDescricao() != null && !categoriaNew.getDescricao().equals("")) {
+            categoria.setDescricao(categoriaNew.getDescricao());
+        }
+
+        repositorio.save(categoria);
+
+        return null;
+
+    }
+
+    public Void delete(Integer id, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
+
+        Optional<CategoriaModel> optional = repositorio.findById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Categoria não existe!");
+        }
+        repositorio.deleteById(id);
+        return null;
+    }
 }
