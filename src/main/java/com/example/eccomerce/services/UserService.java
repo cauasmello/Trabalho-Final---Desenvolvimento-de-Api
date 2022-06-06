@@ -152,6 +152,10 @@ public class UserService {
             throw new ErrorException("CPF já existe");
         }
 
+        if (String.valueOf(user.getCep()).length() != 8) {
+            throw new ErrorException("CEP invalido");
+        }
+
         UserModel userModel = new UserModel(user);
         userModel.setSenha(bCrypt.encode(userModel.getSenha()));
 

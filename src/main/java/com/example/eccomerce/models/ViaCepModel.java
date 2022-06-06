@@ -1,5 +1,7 @@
 package com.example.eccomerce.models;
 
+import java.lang.reflect.Field;
+
 public class ViaCepModel {
 	
 	private String cep;
@@ -64,5 +66,12 @@ public class ViaCepModel {
 
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
+	}
+
+	public Boolean isNull() throws IllegalAccessException {
+		for (Field f : getClass().getDeclaredFields()) {
+			if(f.get(this) == null || f.get(this).equals("")) return true;
+		}
+		return false;
 	}
 }

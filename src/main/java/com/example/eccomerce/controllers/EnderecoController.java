@@ -22,44 +22,44 @@ public class EnderecoController {
     EnderecoService service;
 
     @GetMapping
-    public ResponseEntity<List<EnderecoModel>> getAll() {
+    public ResponseEntity<List<EnderecoModel>> getAll(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Lista dos seus endereços");
 
-        return new ResponseEntity<>(service.getAll(), headers, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(service.getAll(token), headers, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EnderecoModel> get(@PathVariable Integer id) throws ErrorException {
+    public ResponseEntity<EnderecoModel> get(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Seu endereço");
 
-        return new ResponseEntity<>(service.get(id), headers, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(service.get(id, token), headers, HttpStatus.ACCEPTED);
     }
 
     @PostMapping
-    public ResponseEntity<String> add(@Valid @RequestBody ViaCepModel endereco) throws ErrorException {
+    public ResponseEntity<Void> add(@Valid @RequestBody ViaCepModel endereco, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException, IllegalAccessException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Adicionado");
 
-        return new ResponseEntity<>(service.add(endereco), headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.add(endereco, token), headers, HttpStatus.CREATED);
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> put(@Valid @RequestBody EnderecoModel endereco, @PathVariable Integer id) throws ErrorException {
+    public ResponseEntity<Void> put(@Valid @RequestBody ViaCepModel endereco, @PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException, IllegalAccessException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Atualizado");
 
-        return new ResponseEntity<>(service.put(endereco, id), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.put(endereco, id, token), headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) throws ErrorException {
+    public ResponseEntity<Void> delete(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Deletado");
 
-        return new ResponseEntity<>(service.delete(id), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.delete(id, token), headers, HttpStatus.OK);
     }
 
 }
