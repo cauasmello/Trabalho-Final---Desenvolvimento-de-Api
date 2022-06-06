@@ -21,6 +21,7 @@ public class UserModel {
     private String username;
 
     @NotNull
+    @JsonIgnore
     @Column(name = "senha")
     private String senha;
 
