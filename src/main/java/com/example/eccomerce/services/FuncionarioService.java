@@ -28,12 +28,14 @@ public class FuncionarioService {
     public FuncionarioModel get(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
         return myUser.getFuncionario();
     }
 
     public Void put(FuncionarioDTOModel funcionarioNew, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
         FuncionarioModel funcionarioModel = myUser.getFuncionario();
         tools.existFuncionario(funcionarioModel);
 
