@@ -28,22 +28,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	}
 
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-			throws AuthenticationException {
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 		try {
 			UserModel creds = new ObjectMapper().readValue(request.getInputStream(), UserModel.class);
-			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getUsername(),
-					creds.getSenha(), new ArrayList<>());
-			Authentication auth = authenticationManager.authenticate(authToken);
-			return auth;
+			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getUsername(), creds.getSenha(), new ArrayList<>());
+			return authenticationManager.authenticate(authToken);
 		} catch (IOException e) {
 			throw new RuntimeException();
 		}
 	}
 
 	@Override
-	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-			Authentication authResult) throws IOException, ServletException {
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 		String username = ((UserSS) authResult.getPrincipal()).getUsername();
 		String token = jwtUtil.generateToken(username);
 

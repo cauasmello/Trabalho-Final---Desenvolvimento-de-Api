@@ -1,6 +1,5 @@
 package com.example.eccomerce.security;
 
-import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.UserModel;
 import com.example.eccomerce.repositories.UserRepository;
 import io.jsonwebtoken.Jwts;
@@ -18,9 +17,9 @@ import java.util.Optional;
 @Component
 public class JWTUtil {
 
-    private static String secret = "59ccd823b8ebc9b35b548f5ca07be7db";
+    private static final String secret = "apiSerratecSecret";
 
-    private static int expiration = 3600000;
+    private static final int expiration = 3600000;
 
     @Autowired
     UserRepository userRepository;
@@ -30,16 +29,12 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
     }
 
-    public static Authentication getAuthentication(HttpServletRequest request) throws ErrorException {
+    public static Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if (token != null) {
-            try {
-                String user = Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token.replace("Bearer", "")).getBody().getSubject();
-                if (user != null) {
-                    return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-                }
-            } catch (Exception e) {
-                throw new ErrorException("JWT expired");
+            String user = Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token.replace("Bearer", "")).getBody().getSubject();
+            if (user != null) {
+                return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
             }
         }
         return null;
