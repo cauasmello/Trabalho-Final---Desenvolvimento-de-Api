@@ -1,7 +1,6 @@
 package com.example.eccomerce.services;
 
 import com.example.eccomerce.exceptions.ErrorException;
-import com.example.eccomerce.models.CategoriaModel;
 import com.example.eccomerce.models.FuncionarioDTOModel;
 import com.example.eccomerce.models.FuncionarioModel;
 import com.example.eccomerce.models.UserModel;
@@ -33,16 +32,17 @@ public class FuncionarioService {
         tools.onlyFuncionarios(myUser);
         return myUser.getFuncionario();
     }
-    
+
     public FuncionarioModel get(String cpf, String token) throws ErrorException {
-    	 UserModel myUser = jwtUtil.getLoggedUser(token);
-         tools.existUser(myUser);
-         tools.onlyFuncionarios(myUser);
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
         Optional<FuncionarioModel> optional = repositorio.findByCpf(Long.parseLong(cpf));
         if (optional.isEmpty()) {
-            throw new ErrorException("Categoria não existe!");
+            throw new ErrorException("Funcionario não existe!");
         }
+
         return optional.get();
     }
 
