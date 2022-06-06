@@ -2,7 +2,7 @@ package com.example.eccomerce.security;
 
 import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.UserModel;
-import com.example.eccomerce.services.UserService;
+import com.example.eccomerce.repositories.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class JWTUtil {
@@ -22,7 +23,7 @@ public class JWTUtil {
     private static int expiration = 60000;
 
     @Autowired
-    UserService service;
+    UserRepository userRepository;
 
     public String generateToken(String username) {
         return Jwts.builder().setSubject(username).setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -48,7 +49,11 @@ public class JWTUtil {
         if (token != null) {
             String user = Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token.replace("Bearer", "")).getBody().getSubject();
             if (user != null) {
-                return service.getUser(user);
+                Optional<UserModel> optional = userRepository.findByUsername(user);
+                if (optional.isEmpty()) {
+                    return null;
+                }
+                return optional.get();
             }
         }
         return null;

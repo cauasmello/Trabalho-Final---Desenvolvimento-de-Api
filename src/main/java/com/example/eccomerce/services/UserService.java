@@ -1,5 +1,6 @@
 package com.example.eccomerce.services;
 
+import com.example.eccomerce.config.ToolsConfig;
 import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.*;
 import com.example.eccomerce.repositories.ClienteRepository;
@@ -39,19 +40,19 @@ public class UserService {
     @Autowired
     JWTUtil jwtUtil;
 
+    @Autowired
+    ToolsConfig tools;
+
     public UserModel getMyData(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
+        tools.existUser(myUser);
+
         return myUser;
     }
 
     public Void updateMyData(UserModel user, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
+        tools.existUser(myUser);
 
         Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
         if (existUser > 0) {
@@ -77,46 +78,32 @@ public class UserService {
 
     public Void deleteMyData(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
+        tools.existUser(myUser);
+
         userRepository.deleteById(myUser.getId());
         return null;
     }
 
     public List<UserModel> getAllCliente(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
-        if(myUser.getRole() != 1){
-            throw new ErrorException("Permição negada!");
-        }
         return userRepository.findByRole(0);
     }
 
     public List<UserModel> getAllFuncionario(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
-        if(myUser.getRole() != 1){
-            throw new ErrorException("Permição negada!");
-        }
         return userRepository.findByRole(1);
     }
 
     public UserModel getClienteById(Integer id, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
-
-        if(myUser.getRole() != 1){
-            throw new ErrorException("Permição negada!");
-        }
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
         Optional<UserModel> optional = userRepository.findClienteById(id);
         if (optional.isEmpty()) {
@@ -127,13 +114,8 @@ public class UserService {
 
     public UserModel getFuncionarioById(Integer id, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
-
-        if(myUser.getRole() != 1){
-            throw new ErrorException("Permição negada!");
-        }
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
         Optional<UserModel> optional = userRepository.findFuncionarioById(id);
         if (optional.isEmpty()) {
@@ -177,13 +159,8 @@ public class UserService {
 
     public Void createFuncionario(FuncionarioDTOModel user, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
-
-        if(myUser.getRole() != 1){
-            throw new ErrorException("Permição negada!");
-        }
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
         try {
             if(user.isNull()){
@@ -211,13 +188,8 @@ public class UserService {
 
     public Void updateFuncionario(UserModel user, Integer id, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
-
-        if(myUser.getRole() != 1){
-            throw new ErrorException("Permição negada!");
-        }
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
         Optional<UserModel> optional = userRepository.findFuncionarioById(id);
         if (optional.isEmpty()) {
@@ -249,13 +221,8 @@ public class UserService {
 
     public Void deleteCliente(Integer id, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
-
-        if(myUser.getRole() != 1){
-            throw new ErrorException("Permição negada!");
-        }
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
         Optional<UserModel> optional = userRepository.findClienteById(id);
         if (optional.isEmpty()) {
@@ -267,13 +234,8 @@ public class UserService {
 
     public Void deleteFuncionario(Integer id, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
-        if (myUser == null) {
-            throw new ErrorException("Cliente não existe!");
-        }
-
-        if(myUser.getRole() != 1){
-            throw new ErrorException("Permição negada!");
-        }
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
 
         Optional<UserModel> optional = userRepository.findFuncionarioById(id);
         if (optional.isEmpty()) {
