@@ -7,6 +7,7 @@ import com.example.eccomerce.repositories.EnderecoRepository;
 import com.example.eccomerce.repositories.FuncionarioRepository;
 import com.example.eccomerce.repositories.UserRepository;
 import com.example.eccomerce.resources.ViaCepResource;
+import com.example.eccomerce.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,108 @@ public class UserService {
     @Autowired
     BCryptPasswordEncoder bCrypt;
 
-    public List<UserModel> getAllCliente() {
+    @Autowired
+    JWTUtil jwtUtil;
+
+    public UserModel getMyData(String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+        return myUser;
+    }
+
+    public Void updateMyData(UserModel user, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
+        if (existUser > 0) {
+            throw new ErrorException("Email ou Username já existe");
+        }
+
+        if(!user.getEmail().equals("") && user.getEmail() != null){
+            myUser.setEmail(user.getEmail());
+        }
+
+        if(!user.getUsername().equals("") && user.getUsername() != null){
+            myUser.setUsername(user.getUsername());
+        }
+
+        if(!user.getSenha().equals("") && user.getSenha() != null){
+            myUser.setSenha(bCrypt.encode(user.getSenha()));
+        }
+
+        userRepository.save(myUser);
+
+        return null;
+    }
+
+    public Void deleteMyData(String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+        userRepository.deleteById(myUser.getId());
+        return null;
+    }
+
+    public List<UserModel> getAllCliente(String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        if(myUser.getRole() != 1){
+            throw new ErrorException("Permição negada!");
+        }
         return userRepository.findByRole(0);
     }
 
-    public UserModel getClienteById(Integer id) throws ErrorException {
+    public List<UserModel> getAllFuncionario(String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        if(myUser.getRole() != 1){
+            throw new ErrorException("Permição negada!");
+        }
+        return userRepository.findByRole(1);
+    }
+
+    public UserModel getClienteById(Integer id, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        if(myUser.getRole() != 1){
+            throw new ErrorException("Permição negada!");
+        }
+
         Optional<UserModel> optional = userRepository.findClienteById(id);
         if (optional.isEmpty()) {
             throw new ErrorException("Cliente não existe!");
+        }
+        return optional.get();
+    }
+
+    public UserModel getFuncionarioById(Integer id, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        if(myUser.getRole() != 1){
+            throw new ErrorException("Permição negada!");
+        }
+
+        Optional<UserModel> optional = userRepository.findFuncionarioById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Funcionario não existe!");
         }
         return optional.get();
     }
@@ -80,58 +175,16 @@ public class UserService {
         return null;
     }
 
-    public Void updateCliente(UserModel user, Integer id) throws ErrorException {
-        Optional<UserModel> optional = userRepository.findClienteById(id);
-        if (optional.isEmpty()) {
+    public Void createFuncionario(FuncionarioDTOModel user, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
             throw new ErrorException("Cliente não existe!");
         }
 
-        Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
-        if (existUser > 0) {
-            throw new ErrorException("Email ou Username já existe");
+        if(myUser.getRole() != 1){
+            throw new ErrorException("Permição negada!");
         }
 
-        UserModel userToUpdate = optional.get();
-
-        if(!user.getEmail().equals("") && user.getEmail() != null){
-            userToUpdate.setEmail(user.getEmail());
-        }
-
-        if(!user.getUsername().equals("") && user.getUsername() != null){
-            userToUpdate.setUsername(user.getUsername());
-        }
-
-        if(!user.getSenha().equals("") && user.getSenha() != null){
-            userToUpdate.setSenha(bCrypt.encode(user.getSenha()));
-        }
-
-        userRepository.save(userToUpdate);
-
-        return null;
-    }
-
-    public Void deleteCliente(Integer id) throws ErrorException {
-        Optional<UserModel> optional = userRepository.findClienteById(id);
-        if (optional.isEmpty()) {
-            throw new ErrorException("Cliente não existe!");
-        }
-        userRepository.deleteById(id);
-        return null;
-    }
-
-    public List<UserModel> getAllFuncionario() {
-        return userRepository.findByRole(1);
-    }
-
-    public UserModel getFuncionarioById(Integer id) throws ErrorException {
-        Optional<UserModel> optional = userRepository.findFuncionarioById(id);
-        if (optional.isEmpty()) {
-            throw new ErrorException("Funcionario não existe!");
-        }
-        return optional.get();
-    }
-
-    public Void createFuncionario(FuncionarioDTOModel user) throws ErrorException {
         try {
             if(user.isNull()){
                 throw new ErrorException("Parametros invalido");
@@ -156,7 +209,16 @@ public class UserService {
         return null;
     }
 
-    public Void updateFuncionario(UserModel user, Integer id) throws ErrorException {
+    public Void updateFuncionario(UserModel user, Integer id, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        if(myUser.getRole() != 1){
+            throw new ErrorException("Permição negada!");
+        }
+
         Optional<UserModel> optional = userRepository.findFuncionarioById(id);
         if (optional.isEmpty()) {
             throw new ErrorException("Funcionario não existe!");
@@ -185,7 +247,34 @@ public class UserService {
         return null;
     }
 
-    public Void deleteFuncionario(Integer id) throws ErrorException {
+    public Void deleteCliente(Integer id, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        if(myUser.getRole() != 1){
+            throw new ErrorException("Permição negada!");
+        }
+
+        Optional<UserModel> optional = userRepository.findClienteById(id);
+        if (optional.isEmpty()) {
+            throw new ErrorException("Cliente não existe!");
+        }
+        userRepository.deleteById(id);
+        return null;
+    }
+
+    public Void deleteFuncionario(Integer id, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        if (myUser == null) {
+            throw new ErrorException("Cliente não existe!");
+        }
+
+        if(myUser.getRole() != 1){
+            throw new ErrorException("Permição negada!");
+        }
+
         Optional<UserModel> optional = userRepository.findFuncionarioById(id);
         if (optional.isEmpty()) {
             throw new ErrorException("Funcionario não existe!");

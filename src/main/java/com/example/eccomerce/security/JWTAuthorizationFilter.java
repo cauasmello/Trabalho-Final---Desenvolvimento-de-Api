@@ -15,14 +15,14 @@ import java.io.IOException;
 public class JWTAuthorizationFilter extends GenericFilterBean {
 
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		Authentication authentication = null;
-		try {
-			authentication = JWTUtil.getAuthentication((HttpServletRequest) request);
-		} catch (ErrorException ignored){};
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		chain.doFilter(request, response);
-	}
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        Authentication authentication = null;
+        try {
+            authentication = JWTUtil.getAuthentication((HttpServletRequest) request);
+        } catch (ErrorException ignore) {}
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        chain.doFilter(request, response);
+    }
 
 }
