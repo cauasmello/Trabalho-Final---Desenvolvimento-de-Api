@@ -1,9 +1,11 @@
 package com.example.eccomerce.resources;
 
+import org.springframework.context.annotation.Configuration;
+
 import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.ClienteModel;
+import com.example.eccomerce.models.FuncionarioModel;
 import com.example.eccomerce.models.UserModel;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ToolsResource {
@@ -24,6 +26,12 @@ public class ToolsResource {
 		if (cliente == null) {
 			throw new ErrorException("Cliente não existe!");
 		}
+	}
+		
+	public void existFuncionario(FuncionarioModel funcionario) throws ErrorException {
+		if (funcionario == null) {
+			throw new ErrorException("Funcionário não existe!");
+			}
 	}
 
 }
