@@ -3,6 +3,7 @@ package com.example.eccomerce.controllers;
 import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.ClienteDTOModel;
 import com.example.eccomerce.models.FuncionarioDTOModel;
+import com.example.eccomerce.models.UserDTOModel;
 import com.example.eccomerce.models.UserModel;
 import com.example.eccomerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
@@ -22,7 +22,7 @@ public class UserController {
     UserService service;
 
     @GetMapping
-    public ResponseEntity<UserModel> getMyData(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+    public ResponseEntity<UserDTOModel> getMyData(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Success", "Seus dados");
 
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateMyData(@Valid @RequestBody UserModel user, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+    public ResponseEntity<Void> updateMyData(@Valid @RequestBody UserDTOModel user, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Status", "Atualizado");
 
@@ -43,38 +43,6 @@ public class UserController {
         headers.add("Status", "Deletado");
 
         return new ResponseEntity<>(service.deleteMyData(token), headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/clientes")
-    public ResponseEntity<List<UserModel>> getAllCliente(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Success", "Lista de clientes");
-
-        return new ResponseEntity<>(service.getAllCliente(token), headers, HttpStatus.ACCEPTED);
-    }
-
-    @GetMapping("/funcionarios")
-    public ResponseEntity<List<UserModel>> getAllFuncionario(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Success", "Lista de funcionarios");
-
-        return new ResponseEntity<>(service.getAllFuncionario(token), headers, HttpStatus.ACCEPTED);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserModel> getClienteById(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Success", "Cliente");
-
-        return new ResponseEntity<>(service.getClienteById(id, token), headers, HttpStatus.ACCEPTED);
-    }
-
-    @GetMapping("/funcionario/{id}")
-    public ResponseEntity<UserModel> getFuncionarioById(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Success", "Funcionario");
-
-        return new ResponseEntity<>(service.getFuncionarioById(id, token), headers, HttpStatus.ACCEPTED);
     }
 
     @PostMapping
@@ -99,14 +67,6 @@ public class UserController {
         headers.add("Status", "Atualizado");
 
         return new ResponseEntity<>(service.updateFuncionario(user, id, token), headers, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCliente(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Deletado");
-
-        return new ResponseEntity<>(service.deleteCliente(id, token), headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/funcionario/{id}")

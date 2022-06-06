@@ -16,8 +16,11 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
     @Query("SELECT C FROM UserModel C where C.email=:email")
     Optional<UserModel> findByEmail(@Param("email") String email);
 
-    @Query("SELECT count(C) FROM UserModel C where C.email=:email or C.username=:username")
-    Integer existUser(@Param("email") String email, @Param("username") String username);
+    @Query("SELECT count(C) FROM UserModel C where C.email=:email")
+    Integer existUserByEmail(@Param("email") String email);
+
+    @Query("SELECT count(C) FROM UserModel C where C.username=:username")
+    Integer existUserBySusername(@Param("username") String username);
 
     @Query("SELECT C FROM UserModel C where C.role=:role")
     List<UserModel> findByRole(@Param("role") Integer role);
