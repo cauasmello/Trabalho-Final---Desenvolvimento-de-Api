@@ -1,6 +1,6 @@
 package com.example.eccomerce.services;
 
-import com.example.eccomerce.config.ToolsConfig;
+import com.example.eccomerce.resources.ToolsResource;
 import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.*;
 import com.example.eccomerce.repositories.ClienteRepository;
@@ -41,7 +41,7 @@ public class UserService {
     JWTUtil jwtUtil;
 
     @Autowired
-    ToolsConfig tools;
+    ToolsResource tools;
 
     public UserModel getMyData(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
@@ -143,6 +143,15 @@ public class UserService {
             throw new ErrorException("Email ou Username já existe");
         }
 
+        if (String.valueOf(user.getCpf()).length() != 11) {
+            throw new ErrorException("CPF invalido");
+        }
+
+        Integer existCPF = clienteRepository.existCPF(user.getCpf());
+        if (existCPF > 0) {
+            throw new ErrorException("CPF já existe");
+        }
+
         UserModel userModel = new UserModel(user);
         userModel.setSenha(bCrypt.encode(userModel.getSenha()));
 
@@ -173,6 +182,15 @@ public class UserService {
         Integer existUser = userRepository.existUser(user.getEmail(), user.getUsername());
         if (existUser > 0) {
             throw new ErrorException("Email ou Username já existe");
+        }
+
+        if (String.valueOf(user.getCpf()).length() != 11) {
+            throw new ErrorException("CPF invalido");
+        }
+
+        Integer existCPF = funcionarioRepository.existCPF(user.getCpf());
+        if (existCPF > 0) {
+            throw new ErrorException("CPF já existe");
         }
 
         UserModel userModel = new UserModel(user);

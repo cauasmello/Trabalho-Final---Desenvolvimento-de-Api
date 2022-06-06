@@ -31,9 +31,11 @@ public class ClienteModel {
     @Column(name = "nascimento")
     private LocalDate nascimento;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoModel> pedidos;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EnderecoModel> endereco;
 
@@ -128,4 +130,5 @@ public class ClienteModel {
     public void setUser(UserModel user) {
         this.user = user;
     }
+
 }

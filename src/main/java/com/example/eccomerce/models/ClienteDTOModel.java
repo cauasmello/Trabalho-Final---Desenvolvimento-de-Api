@@ -1,6 +1,5 @@
 package com.example.eccomerce.models;
 
-import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
 
 public class ClienteDTOModel {
@@ -28,7 +27,7 @@ public class ClienteDTOModel {
         super();
     }
 
-    public ClienteDTOModel(@NotNull String email, @NotNull String username, @NotNull String senha, @NotNull String nome, @NotNull Long cpf, @NotNull Long telefone, @NotNull String nascimento, @NotNull Long cep, @NotNull Integer numero, @NotNull String complemento) {
+    public ClienteDTOModel(String email, String username, String senha, String nome, Long cpf, Long telefone, String nascimento, Long cep, Integer numero, String complemento) {
         super();
         this.email = email;
         this.username = username;
