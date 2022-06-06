@@ -1,6 +1,7 @@
 package com.example.eccomerce.services;
 
 import com.example.eccomerce.exceptions.ErrorException;
+import com.example.eccomerce.models.CategoriaModel;
 import com.example.eccomerce.models.FuncionarioDTOModel;
 import com.example.eccomerce.models.FuncionarioModel;
 import com.example.eccomerce.models.UserModel;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class FuncionarioService {
@@ -25,12 +27,25 @@ public class FuncionarioService {
     @Autowired
     ToolsResource tools;
 
-    public FuncionarioModel get(String token) throws ErrorException {
+    public FuncionarioModel getAll(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
         tools.onlyFuncionarios(myUser);
         return myUser.getFuncionario();
     }
+    
+    public FuncionarioModel get(String cpf, String token) throws ErrorException {
+    	 UserModel myUser = jwtUtil.getLoggedUser(token);
+         tools.existUser(myUser);
+         tools.onlyFuncionarios(myUser);
+
+        Optional<FuncionarioModel> optional = repositorio.findByCpf(Long.parseLong(cpf));
+        if (optional.isEmpty()) {
+            throw new ErrorException("Categoria não existe!");
+        }
+        return optional.get();
+    }
+
 
     public Void put(FuncionarioDTOModel funcionarioNew, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
