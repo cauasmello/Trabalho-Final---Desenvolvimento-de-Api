@@ -1,22 +1,16 @@
 package com.example.eccomerce.controllers;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.ClienteDTOModel;
 import com.example.eccomerce.models.ClienteModel;
 import com.example.eccomerce.services.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/cliente")
@@ -28,7 +22,7 @@ public class ClienteController {
     @GetMapping
     public ResponseEntity<ClienteModel> get(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Cliente");
+        headers.add("Success", "Cliente");
 
         return new ResponseEntity<>(service.get(token), headers, HttpStatus.ACCEPTED);
     }
@@ -36,7 +30,7 @@ public class ClienteController {
     @PutMapping()
     public ResponseEntity<Void> put(@Valid @RequestBody ClienteDTOModel cliente, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Atualizado");
+        headers.add("Success", "Atualizado");
 
         return new ResponseEntity<>(service.put(cliente, token), headers, HttpStatus.OK);
     }
