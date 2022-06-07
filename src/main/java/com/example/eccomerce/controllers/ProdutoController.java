@@ -68,7 +68,7 @@ public class ProdutoController {
 	@PostMapping
 	public ResponseEntity<String> postProduto(@RequestPart ProdutoModel produto, @RequestParam MultipartFile file, @RequestHeader(name="Authorization") String token) throws ErrorException, IOException {
 		if(!jwtUtil.getLoggedUser(token).equals("funcionario")) {
-			throw new ErrorException("Você não é autorizado a acessar essa url");         
+			throw new ErrorException("Você não pode acessar essa url");         
 			}
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Produto", "Produto Inserido");
@@ -99,7 +99,7 @@ public class ProdutoController {
 	}
 	
 	@GetMapping("/{id}/imagem")
-	public ResponseEntity<byte[]> getImage(@PathVariable Integer id){
+	public ResponseEntity<byte[]> getImagem(@PathVariable Integer id){
 		ImagemProdutoModel imagem = imageService.getImagem(id);
 		HttpHeaders headers = new HttpHeaders(); 
 		headers.add("content-type", imagem.getMimeType());
