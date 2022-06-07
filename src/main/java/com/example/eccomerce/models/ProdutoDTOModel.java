@@ -4,16 +4,18 @@ public class ProdutoDTOModel {
 	
 	private Integer id;
 	private String nome;
+	private String descricao;
 	private String url;
 	
 	public ProdutoDTOModel() {
 		super();
 	}
 
-	public ProdutoDTOModel(Integer id, String nome, String url) {
+	public ProdutoDTOModel(ProdutoModel produto, String url) {
 		super();
-		this.id = id;
-		this.nome = nome;
+		this.id = produto.getId();
+		this.nome = produto.getNome();
+		this.descricao = produto.getDescricao();
 		this.url = url;
 	}
 
@@ -42,7 +44,11 @@ public class ProdutoDTOModel {
 	}
 
 
-	
-	
+	public String getDescricao() {
+		return descricao;
+	}
 
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 }

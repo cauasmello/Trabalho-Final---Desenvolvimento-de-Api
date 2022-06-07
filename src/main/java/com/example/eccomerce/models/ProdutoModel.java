@@ -1,22 +1,12 @@
 package com.example.eccomerce.models;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "produtos")
@@ -41,39 +31,33 @@ public class ProdutoModel {
     @Column(name = "quantidade_estoque")
     private Integer quantidade_estoque;
 
-    @NotNull
     @Column(name = "criado")
     @PastOrPresent
     private LocalDate criado;
 
-    @NotNull
-    @Column(name = "img")
-    private String img;
-
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private CategoriaModel categoria;
 
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "funcionario_id", referencedColumnName = "id")
     private FuncionarioModel funcionario;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoProdutoModel> pedidos;
-    
-    @OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(nullable=false)
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
 	private ImagemProdutoModel imagem;
 
     public ProdutoModel() {
         super();
     }
 
-   
-
-    public ProdutoModel(Integer id, @NotNull String nome, @NotNull String descricao, @NotNull Double valor,
-			@NotNull Integer quantidade_estoque, @NotNull LocalDate criado, @NotNull String img, CategoriaModel categoria,
-			FuncionarioModel funcionario, List<PedidoProdutoModel> pedidos, ImagemProdutoModel imagem) {
+    public ProdutoModel(Integer id, String nome, String descricao, Double valor, Integer quantidade_estoque, LocalDate criado, CategoriaModel categoria, FuncionarioModel funcionario, List<PedidoProdutoModel> pedidos, ImagemProdutoModel imagem) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -81,14 +65,11 @@ public class ProdutoModel {
 		this.valor = valor;
 		this.quantidade_estoque = quantidade_estoque;
 		this.criado = criado;
-		this.img = img;
 		this.categoria = categoria;
 		this.funcionario = funcionario;
 		this.pedidos = pedidos;
 		this.imagem = imagem;
 	}
-
-
 
 	public Integer getId() {
         return id;
@@ -126,27 +107,13 @@ public class ProdutoModel {
         this.quantidade_estoque = quantidade_estoque;
     }
 
-  
-
     public LocalDate getCriado() {
 		return criado;
 	}
 
-
-
 	public void setCriado(LocalDate criado) {
 		this.criado = criado;
 	}
-
-
-
-	public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
 
     public CategoriaModel getCategorio() {
         return categoria;
@@ -172,17 +139,12 @@ public class ProdutoModel {
         this.pedidos = pedidos;
     }
 
-
-
 	public ImagemProdutoModel getImagem() {
 		return imagem;
 	}
 
-
-
 	public void setImagem(ImagemProdutoModel imagem) {
 		this.imagem = imagem;
 	}
-    
-    
+
 }
