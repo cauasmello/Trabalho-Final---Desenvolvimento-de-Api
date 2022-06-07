@@ -26,7 +26,6 @@ public class CategoriaService {
 
     public List<CategoriaModel> getAll() {
         List<CategoriaModel> list = repositorio.findAll();
-        System.out.println(list);
         return list;
     }
 

@@ -33,6 +33,8 @@ public class EnderecoService {
     public List<EnderecoModel> getAll(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyClientes(myUser);
+
         ClienteModel clienteModel = myUser.getCliente();
         tools.existCliente(clienteModel);
 
@@ -42,6 +44,8 @@ public class EnderecoService {
     public EnderecoModel get(Integer id, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyClientes(myUser);
+
         ClienteModel clienteModel = myUser.getCliente();
         tools.existCliente(clienteModel);
 
@@ -56,6 +60,8 @@ public class EnderecoService {
     public Void add(ViaCepModel viacep, String token) throws ErrorException, IllegalAccessException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyClientes(myUser);
+
         ClienteModel clienteModel = myUser.getCliente();
         tools.existCliente(clienteModel);
 
@@ -93,6 +99,8 @@ public class EnderecoService {
     public Void put(ViaCepModel viacep, Integer id, String token) throws ErrorException, IllegalAccessException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyClientes(myUser);
+
         ClienteModel clienteModel = myUser.getCliente();
         tools.existCliente(clienteModel);
 
@@ -138,6 +146,8 @@ public class EnderecoService {
     public Void delete(Integer id, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyClientes(myUser);
+
         ClienteModel clienteModel = myUser.getCliente();
         tools.existCliente(clienteModel);
 

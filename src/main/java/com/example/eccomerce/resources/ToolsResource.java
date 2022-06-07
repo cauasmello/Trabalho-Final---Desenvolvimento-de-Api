@@ -16,6 +16,12 @@ public class ToolsResource {
 		}
 	}
 
+	public void onlyClientes(UserModel user) throws ErrorException {
+		if(user.getRole() != 0){
+			throw new ErrorException("Permição negada!");
+		}
+	}
+
 	public void existUser(UserModel user) throws ErrorException {
 		if (user == null) {
 			throw new ErrorException("Usuario não existe!");

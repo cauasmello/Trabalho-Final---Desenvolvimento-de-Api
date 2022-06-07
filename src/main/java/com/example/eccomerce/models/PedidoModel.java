@@ -1,10 +1,14 @@
 package com.example.eccomerce.models;
 
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Entity
 @Table(name = "pedidos")
@@ -14,7 +18,7 @@ public class PedidoModel {
     private Integer id;
 
     @NotNull
-    @Column(name = "numero")
+    @Column(name = "numero", unique = true)
     private String numero;
 
     @NotNull
@@ -25,7 +29,6 @@ public class PedidoModel {
     @Column(name = "criado")
     private LocalDate criado;
 
-    @NotNull
     @Column(name = "entrege")
     private LocalDate entrege;
 
@@ -33,10 +36,12 @@ public class PedidoModel {
     @Column(name = "status")
     private String status;
 
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteModel cliente;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoProdutoModel> produtos;
 
@@ -54,6 +59,19 @@ public class PedidoModel {
         this.status = status;
         this.cliente = cliente;
         this.produtos = produtos;
+    }
+
+    public PedidoModel(ClienteModel cliente) {
+        super();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Date date = new Date();
+
+        this.numero = this.generateNumber();
+        this.valor = 0.00;
+        this.criado = LocalDate.parse(date.toString(), formatter);
+        this.entrege = null;
+        this.status = "Aberto";
+        this.cliente = cliente;
     }
 
     public Integer getId() {
@@ -88,8 +106,9 @@ public class PedidoModel {
         return entrege;
     }
 
-    public void setEntrege(LocalDate entrege) {
-        this.entrege = entrege;
+    public void setEntrege(Date entrege) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.entrege = LocalDate.parse(entrege.toString(), formatter);
     }
 
     public String getStatus() {
@@ -114,5 +133,18 @@ public class PedidoModel {
 
     public void setProdutos(List<PedidoProdutoModel> produtos) {
         this.produtos = produtos;
+    }
+
+    private String generateNumber() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        return random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }

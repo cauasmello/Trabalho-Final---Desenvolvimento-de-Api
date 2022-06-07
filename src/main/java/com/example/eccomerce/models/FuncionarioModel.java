@@ -56,7 +56,7 @@ public class FuncionarioModel {
 
     public FuncionarioModel(FuncionarioDTOModel funcionario, UserModel user) {
         super();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         this.nome = funcionario.getNome();
         this.cpf = funcionario.getCpf();

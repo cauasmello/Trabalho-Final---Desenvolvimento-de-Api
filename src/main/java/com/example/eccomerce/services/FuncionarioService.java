@@ -62,7 +62,7 @@ public class FuncionarioService {
         }
 
         if (funcionarioNew.getNascimento() != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             funcionarioModel.setNascimento(LocalDate.parse(funcionarioNew.getNascimento(), formatter));
         }
 

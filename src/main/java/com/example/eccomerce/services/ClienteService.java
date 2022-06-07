@@ -27,12 +27,16 @@ public class ClienteService {
     public ClienteModel get(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyClientes(myUser);
+
         return myUser.getCliente();
     }
 
     public Void put(ClienteDTOModel clienteNew, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
+        tools.onlyClientes(myUser);
+
         ClienteModel clienteModel = myUser.getCliente();
         tools.existCliente(clienteModel);
 
@@ -45,7 +49,7 @@ public class ClienteService {
         }
 
         if (clienteNew.getNascimento() != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             clienteModel.setNascimento(LocalDate.parse(clienteNew.getNascimento(), formatter));
         }
 

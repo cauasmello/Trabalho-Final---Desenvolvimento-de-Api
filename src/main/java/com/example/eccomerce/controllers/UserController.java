@@ -32,7 +32,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<Void> updateMyData(@Valid @RequestBody UserDTOModel user, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Atualizado");
+        headers.add("Success", "Atualizado");
 
         return new ResponseEntity<>(service.updateMyData(user, token), headers, HttpStatus.OK);
     }
@@ -40,7 +40,7 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<Void> deleteMyData(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Deletado");
+        headers.add("Success", "Deletado");
 
         return new ResponseEntity<>(service.deleteMyData(token), headers, HttpStatus.OK);
     }
@@ -64,7 +64,7 @@ public class UserController {
     @PutMapping("/funcionario/{id}")
     public ResponseEntity<Void> updateFuncionario(@Valid @RequestBody UserModel user, @PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Atualizado");
+        headers.add("Success", "Atualizado");
 
         return new ResponseEntity<>(service.updateFuncionario(user, id, token), headers, HttpStatus.OK);
     }
@@ -72,7 +72,7 @@ public class UserController {
     @DeleteMapping("/funcionario/{id}")
     public ResponseEntity<Void> deleteFuncionario(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Deletado");
+        headers.add("Success", "Deletado");
 
         return new ResponseEntity<>(service.deleteFuncionario(id, token), headers, HttpStatus.OK);
     }

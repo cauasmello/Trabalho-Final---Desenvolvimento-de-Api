@@ -21,7 +21,7 @@ public class CategoriaController {
     @GetMapping
     public ResponseEntity<List<CategoriaModel>> getAll() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Lista de categorias");
+        headers.add("Success", "Lista de categorias");
 
         return new ResponseEntity<>(service.getAll(), headers, HttpStatus.ACCEPTED);
     }
@@ -29,7 +29,7 @@ public class CategoriaController {
     @GetMapping("/{name}")
     public ResponseEntity<CategoriaModel> get(@PathVariable String name) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Categoria");
+        headers.add("Success", "Categoria");
 
         return new ResponseEntity<>(service.get(name), headers, HttpStatus.ACCEPTED);
     }
@@ -37,7 +37,7 @@ public class CategoriaController {
     @PostMapping
     public ResponseEntity<Void> add(@RequestBody CategoriaModel categoria, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Adicionado");
+        headers.add("Success", "Adicionado");
 
         return new ResponseEntity<>(service.add(categoria, token), headers, HttpStatus.CREATED);
 
@@ -46,7 +46,7 @@ public class CategoriaController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> put(@RequestBody CategoriaModel categoria, @PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Atualizado");
+        headers.add("Success", "Atualizado");
 
         return new ResponseEntity<>(service.put(categoria, id, token), headers, HttpStatus.OK);
     }
@@ -54,7 +54,7 @@ public class CategoriaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Status", "Deletado");
+        headers.add("Success", "Deletado");
 
         return new ResponseEntity<>(service.delete(id, token), headers, HttpStatus.OK);
     }
