@@ -3,8 +3,10 @@ package com.example.eccomerce.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -14,19 +16,15 @@ public class ProdutoModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
     @Column(name = "nome")
     private String nome;
 
-    @NotNull
     @Column(name = "descricao")
     private String descricao;
 
-    @NotNull
     @Column(name = "valor")
     private Double valor;
 
-    @NotNull
     @Column(name = "quantidade_estoque")
     private Integer quantidade_estoque;
 
@@ -68,6 +66,19 @@ public class ProdutoModel {
 		this.pedidos = pedidos;
 		this.imagem = imagem;
 	}
+
+    public ProdutoModel(ProdutoDTOModel produto, CategoriaModel categoria, FuncionarioModel funcionario) {
+        super();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Date date = new Date();
+        this.nome = produto.getNome();
+        this.descricao = produto.getDescricao();
+        this.valor = produto.getValor();
+        this.quantidade_estoque = produto.getQuantidade_estoque();
+        this.criado = LocalDate.parse(date.toString(), formatter);
+        this.categoria = categoria;
+        this.funcionario = funcionario;
+    }
 
 	public Integer getId() {
         return id;
@@ -145,4 +156,10 @@ public class ProdutoModel {
 		this.imagem = imagem;
 	}
 
+    public Boolean isNull() throws IllegalAccessException {
+        for (Field f : getClass().getDeclaredFields()) {
+            if(f.get(this) == null) return true;
+        }
+        return false;
+    }
 }

@@ -1,10 +1,9 @@
 package com.example.eccomerce.services;
 
 import com.example.eccomerce.exceptions.ErrorException;
-import com.example.eccomerce.models.ClienteModel;
-import com.example.eccomerce.models.ProdutoDTOModel;
-import com.example.eccomerce.models.ProdutoModel;
-import com.example.eccomerce.models.UserModel;
+import com.example.eccomerce.models.*;
+import com.example.eccomerce.repositories.CategoriaRepository;
+import com.example.eccomerce.repositories.ImagemProdutoRepository;
 import com.example.eccomerce.repositories.ProdutoRepository;
 import com.example.eccomerce.resources.ToolsResource;
 import com.example.eccomerce.security.JWTUtil;
@@ -14,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +23,12 @@ public class ProdutoService {
 
     @Autowired
     ProdutoRepository repositorio;
+
+    @Autowired
+    ImagemProdutoRepository imagemProdutoRepository;
+
+    @Autowired
+    CategoriaRepository categoriaRepository;
 
     @Autowired
     ImagemProdutoService imagemProdutoService;
@@ -57,27 +59,32 @@ public class ProdutoService {
         return new ProdutoDTOModel(produto, imagemProdutoService.generateURL(produto.getId()));
     }
 
-    public Void add(ProdutoModel produtoNew, MultipartFile file, String token) throws IOException, ErrorException {
+    public Void add(ProdutoDTOModel produtoNew, MultipartFile file, String token) throws IOException, ErrorException, IllegalAccessException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
         tools.onlyFuncionarios(myUser);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        Date date = new Date();
-        produtoNew.setCriado(LocalDate.parse(date.toString(), formatter));
+        if(produtoNew.isNull()){
+            throw new ErrorException("Infomrações invalidas!");
+        }
 
-        repositorio.save(produtoNew);
-        imagemProdutoService.add(produtoNew, file);
+        Optional<CategoriaModel> optional = categoriaRepository.findById(produtoNew.getCategoria_id());
+
+        if(optional.isEmpty()){
+            throw new ErrorException("Categoria não existe!");
+        }
+
+        ProdutoModel produto = new ProdutoModel(produtoNew, optional.get(), myUser.getFuncionario());
+
+        repositorio.save(produto);
+        imagemProdutoService.add(produto, file);
         return null;
     }
 
-    public Void update(Integer id, ProdutoModel produtoNew, String token) throws ErrorException {
+    public Void update(ProdutoDTOModel produtoNew, Integer id, MultipartFile file, String token) throws ErrorException, IOException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
         tools.onlyFuncionarios(myUser);
-
-        ClienteModel clienteModel = myUser.getCliente();
-        tools.existCliente(clienteModel);
 
         Optional<ProdutoModel> optional = repositorio.findById(id);
 
@@ -94,16 +101,23 @@ public class ProdutoService {
             produto.setDescricao(produtoNew.getDescricao());
         }
 
-        if (produtoNew.getValor() != null && !produtoNew.getValor().equals("")) {
+        if (produtoNew.getValor() != null) {
             produto.setValor(produtoNew.getValor());
         }
 
-        if (produtoNew.getQuantidade_estoque() != null && !produtoNew.getQuantidade_estoque().equals("")) {
+        if (produtoNew.getQuantidade_estoque() != null) {
             produto.setQuantidade_estoque(produtoNew.getQuantidade_estoque());
         }
 
-
         repositorio.save(produto);
+
+        if(!file.isEmpty()){
+            ImagemProdutoModel image = produto.getImagem();
+            image.setMimeType(file.getContentType());
+            image.setName(file.getName());
+            image.setData(file.getBytes());
+            imagemProdutoRepository.save(image);
+        }
 
         return null;
     }

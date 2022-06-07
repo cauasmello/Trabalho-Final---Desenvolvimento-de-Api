@@ -3,7 +3,6 @@ package com.example.eccomerce.controllers;
 import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.ImagemProdutoModel;
 import com.example.eccomerce.models.ProdutoDTOModel;
-import com.example.eccomerce.models.ProdutoModel;
 import com.example.eccomerce.security.JWTUtil;
 import com.example.eccomerce.services.ImagemProdutoService;
 import com.example.eccomerce.services.ProdutoService;
@@ -38,27 +37,25 @@ public class ProdutoController {
     }
 
     @GetMapping("/{nome}")
-    public ResponseEntity<ProdutoDTOModel> getbyNomeDTO(@PathVariable String nome) throws ErrorException {
+    public ResponseEntity<ProdutoDTOModel> get(@PathVariable String nome) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Success", "Produto por nome");
         return new ResponseEntity<ProdutoDTOModel>(service.get(nome), headers, HttpStatus.ACCEPTED);
     }
 
     @PostMapping
-    public ResponseEntity<Void> postProduto(@RequestPart ProdutoModel produto, @RequestParam MultipartFile file, @RequestHeader(name = "Authorization") String token) throws ErrorException, IOException {
+    public ResponseEntity<Void> postProduto(@RequestPart ProdutoDTOModel produto, @RequestParam MultipartFile file, @RequestHeader(name = "Authorization") String token) throws ErrorException, IOException, IllegalAccessException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Success", "Produto Inserido");
         return new ResponseEntity<>(service.add(produto, file, token), headers, HttpStatus.CREATED);
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<Void> putProduto(@RequestBody ProdutoModel produto, @PathVariable Integer id, @RequestHeader(name = "Authorization") String token) throws ErrorException {
+    public ResponseEntity<Void> putProduto(@RequestPart ProdutoDTOModel produto, @RequestParam MultipartFile file, @PathVariable Integer id, @RequestHeader(name = "Authorization") String token) throws ErrorException, IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Success", "Produto Atualizado");
-        return new ResponseEntity<>(service.update(id, produto, token), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.update(produto, id, file, token), headers, HttpStatus.OK);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduto(@PathVariable Integer id, @RequestHeader(name = "Authorization") String token) throws ErrorException {
