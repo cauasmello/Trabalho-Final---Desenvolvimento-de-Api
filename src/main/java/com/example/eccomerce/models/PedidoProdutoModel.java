@@ -43,6 +43,14 @@ public class PedidoProdutoModel {
         this.pedido = pedido;
     }
 
+    public PedidoProdutoModel(Double valor, Integer quantidade, ProdutoModel produto, PedidoModel pedido) {
+        super();
+        this.valor = valor;
+        this.quantidade = quantidade;
+        this.produto = produto;
+        this.pedido = pedido;
+    }
+
     public Integer getId() {
         return id;
     }
