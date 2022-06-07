@@ -1,10 +1,22 @@
 package com.example.eccomerce.models;
 
-import javax.validation.constraints.NotNull;
-
-import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
 @Entity
 @Table(name = "produtos")
@@ -31,7 +43,8 @@ public class ProdutoModel {
 
     @NotNull
     @Column(name = "criado")
-    private Date criado;
+    @PastOrPresent
+    private LocalDate criado;
 
     @NotNull
     @Column(name = "img")
@@ -47,24 +60,37 @@ public class ProdutoModel {
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoProdutoModel> pedidos;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable=false)
+	private ImagemProdutoModel imagem;
 
     public ProdutoModel() {
         super();
     }
 
-    public ProdutoModel(String nome, String descricao, Double valor, Integer quantidade_estoque, String img, CategoriaModel categoria, List<PedidoProdutoModel> pedidos, FuncionarioModel funcionario) {
-        super();
-        this.nome = nome;
-        this.descricao = descricao;
-        this.valor = valor;
-        this.quantidade_estoque = quantidade_estoque;
-        this.img = img;
-        this.categoria = categoria;
-        this.funcionario = funcionario;
-        this.pedidos = pedidos;
-    }
+   
 
-    public Integer getId() {
+    public ProdutoModel(Integer id, @NotNull String nome, @NotNull String descricao, @NotNull Double valor,
+			@NotNull Integer quantidade_estoque, @NotNull LocalDate criado, @NotNull String img, CategoriaModel categoria,
+			FuncionarioModel funcionario, List<PedidoProdutoModel> pedidos, ImagemProdutoModel imagem) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.descricao = descricao;
+		this.valor = valor;
+		this.quantidade_estoque = quantidade_estoque;
+		this.criado = criado;
+		this.img = img;
+		this.categoria = categoria;
+		this.funcionario = funcionario;
+		this.pedidos = pedidos;
+		this.imagem = imagem;
+	}
+
+
+
+	public Integer getId() {
         return id;
     }
 
@@ -100,15 +126,21 @@ public class ProdutoModel {
         this.quantidade_estoque = quantidade_estoque;
     }
 
-    public Date getCriado() {
-        return criado;
-    }
+  
 
-    public void setCriado(Date criado) {
-        this.criado = criado;
-    }
+    public LocalDate getCriado() {
+		return criado;
+	}
 
-    public String getImg() {
+
+
+	public void setCriado(LocalDate criado) {
+		this.criado = criado;
+	}
+
+
+
+	public String getImg() {
         return img;
     }
 
@@ -139,4 +171,18 @@ public class ProdutoModel {
     public void setPedidos(List<PedidoProdutoModel> pedidos) {
         this.pedidos = pedidos;
     }
+
+
+
+	public ImagemProdutoModel getImagem() {
+		return imagem;
+	}
+
+
+
+	public void setImagem(ImagemProdutoModel imagem) {
+		this.imagem = imagem;
+	}
+    
+    
 }
