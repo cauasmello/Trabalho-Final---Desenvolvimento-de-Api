@@ -45,7 +45,8 @@ public class PedidoProdutoService {
         }
 
         List<ProdutoDTOModel> produtoDTOModels = new ArrayList<>();
-        for(PedidoProdutoModel pedidoProdutoModel : optional.get().getProdutos()){
+        List<PedidoProdutoModel> pedidoProdutoModels = optional.get().getProdutos();
+        for(PedidoProdutoModel pedidoProdutoModel : pedidoProdutoModels){
             produtoDTOModels.add(new ProdutoDTOModel(pedidoProdutoModel.getProduto(), imagemProdutoService.generateURL(pedidoProdutoModel.getProduto().getId())));
         }
 
