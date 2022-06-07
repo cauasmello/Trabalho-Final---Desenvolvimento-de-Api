@@ -16,6 +16,6 @@ public interface PedidoRepository extends JpaRepository<PedidoModel, Integer> {
     @Query("SELECT C FROM PedidoModel C where C.numero=:numero")
     Optional<PedidoModel> findByNumero(@Param("numero") String numero);
 
-    @Query("SELECT count(C) FROM PedidoModel C where C.cliente=:cliente and C.status=Aberto")
+    @Query("SELECT count(C) FROM PedidoModel C where C.cliente=:cliente and C.status like 'Aberto'")
     Integer existPedidoAberto(@Param("cliente") ClienteModel cliente);
 }

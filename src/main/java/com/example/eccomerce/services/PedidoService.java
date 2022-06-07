@@ -20,6 +20,9 @@ public class PedidoService {
     PedidoRepository repositorio;
 
     @Autowired
+    ImagemProdutoService imagemProdutoService;
+
+    @Autowired
     JWTUtil jwtUtil;
 
     @Autowired
@@ -29,7 +32,7 @@ public class PedidoService {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
 
-        if(myUser.getRole() == 0){
+        if (myUser.getRole() == 0) {
             return myUser.getCliente().getPedidos();
         }
 
@@ -41,9 +44,9 @@ public class PedidoService {
         tools.existUser(myUser);
 
         Optional<PedidoModel> optional;
-        if(myUser.getRole() == 0) {
+        if (myUser.getRole() == 0) {
             optional = repositorio.findByClienteAndNumero(myUser.getCliente(), numero);
-        } else{
+        } else {
             optional = repositorio.findByNumero(numero);
         }
 
@@ -59,7 +62,7 @@ public class PedidoService {
         tools.existUser(myUser);
         tools.onlyClientes(myUser);
 
-        if(repositorio.existPedidoAberto(myUser.getCliente()) > 0){
+        if (repositorio.existPedidoAberto(myUser.getCliente()) > 0) {
             throw new ErrorException("Você já tem um pedido aberto!");
         }
 
@@ -69,7 +72,7 @@ public class PedidoService {
         return novoPedido;
     }
 
-    public Void put(String numero, String token) throws ErrorException {
+    public Void liberar(String numero, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
         tools.onlyClientes(myUser);
@@ -81,7 +84,7 @@ public class PedidoService {
 
         PedidoModel pedido = optional.get();
 
-        if(pedido.getProdutos() == null){
+        if (pedido.getProdutos() == null) {
             throw new ErrorException("Para finalizar adicione um produto!");
         }
 
@@ -96,9 +99,9 @@ public class PedidoService {
         tools.existUser(myUser);
 
         Optional<PedidoModel> optional;
-        if(myUser.getRole() == 0) {
+        if (myUser.getRole() == 0) {
             optional = repositorio.findByClienteAndNumero(myUser.getCliente(), numero);
-        } else{
+        } else {
             optional = repositorio.findByNumero(numero);
         }
 
@@ -106,9 +109,7 @@ public class PedidoService {
             throw new ErrorException("Pedido não existe!");
         }
 
-        PedidoModel pedido = optional.get();
-
-        repositorio.deleteById(pedido.getId());
+        repositorio.deleteById(optional.get().getId());
         return null;
     }
 }

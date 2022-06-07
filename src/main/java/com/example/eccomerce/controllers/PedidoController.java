@@ -43,12 +43,21 @@ public class PedidoController {
 
     }
 
+    @PostMapping("/{numero}/addProduto")
+    public ResponseEntity<Void> addProduto(@PathVariable String numero, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Success", "Adicionado");
+
+        return new ResponseEntity<>(null, headers, HttpStatus.CREATED);
+
+    }
+
     @PutMapping("/{numero}")
-    public ResponseEntity<Void> put(@PathVariable String numero, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+    public ResponseEntity<Void> liberar(@PathVariable String numero, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Success", "finalizado");
 
-        return new ResponseEntity<>(service.put(numero, token), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.liberar(numero, token), headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/{numero}")

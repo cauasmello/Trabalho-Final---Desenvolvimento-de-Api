@@ -1,5 +1,7 @@
 package com.example.eccomerce.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -18,10 +20,12 @@ public class PedidoProdutoModel {
     @Column(name = "quantidade")
     private Integer quantidade;
 
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "produto_id", referencedColumnName = "id")
     private ProdutoModel produto;
 
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "pedido_id", referencedColumnName = "id")
     private PedidoModel pedido;

@@ -63,10 +63,11 @@ public class PedidoModel {
     public PedidoModel(ClienteModel cliente) {
         super();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String now = formatter.format(LocalDate.now());
 
         this.numero = this.generateNumber();
         this.valor = 0.00;
-        this.criado = LocalDate.parse(formatter.format(LocalDate.now()));
+        this.criado = LocalDate.parse(now, formatter);
         this.entrege = null;
         this.status = "Aberto";
         this.cliente = cliente;
