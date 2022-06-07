@@ -20,11 +20,11 @@ public class FuncionarioController {
     FuncionarioService service;
 
     @GetMapping
-    public ResponseEntity<FuncionarioModel> getAll(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+    public ResponseEntity<FuncionarioModel> getMyData(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Success", "Funcionario");
 
-        return new ResponseEntity<>(service.getAll(token), headers, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(service.getMyData(token), headers, HttpStatus.ACCEPTED);
     }
     
     @GetMapping("/{cpf}")
@@ -41,6 +41,14 @@ public class FuncionarioController {
         headers.add("Success", "Atualizado");
 
         return new ResponseEntity<>(service.put(funcionario, token), headers, HttpStatus.OK);
+    }
+
+    @PutMapping("/{cpf}")
+    public ResponseEntity<Void> updateFuncionario(@PathVariable String cpf, @Valid @RequestBody FuncionarioDTOModel funcionario, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Success", "Atualizado");
+
+        return new ResponseEntity<>(service.updateFuncionario(cpf, funcionario, token), headers, HttpStatus.OK);
     }
 
 

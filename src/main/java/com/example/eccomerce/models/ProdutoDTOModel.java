@@ -56,7 +56,6 @@ public class ProdutoDTOModel {
 		this.url = url;
 	}
 
-
 	public String getDescricao() {
 		return descricao;
 	}
@@ -89,18 +88,18 @@ public class ProdutoDTOModel {
 		this.categoria_id = categoria_id;
 	}
 
-	public Boolean isNull() throws IllegalAccessException {
-		for (Field f : getClass().getDeclaredFields()) {
-			if(f.get(this) == null) return true;
-		}
-		return false;
-	}
-
 	public Double getValor() {
 		return valor;
 	}
 
 	public void setValor(Double valor) {
 		this.valor = valor;
+	}
+
+	public Boolean isNull() throws IllegalAccessException {
+		for (Field f : getClass().getDeclaredFields()) {
+			if(f.get(this) == null) return true;
+		}
+		return false;
 	}
 }

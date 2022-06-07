@@ -4,7 +4,6 @@ import com.example.eccomerce.exceptions.ErrorException;
 import com.example.eccomerce.models.ClienteDTOModel;
 import com.example.eccomerce.models.FuncionarioDTOModel;
 import com.example.eccomerce.models.UserDTOModel;
-import com.example.eccomerce.models.UserModel;
 import com.example.eccomerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
@@ -45,6 +45,22 @@ public class UserController {
         return new ResponseEntity<>(service.deleteMyData(token), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/clientes")
+    public ResponseEntity<List<UserDTOModel>> getClientes(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Success", "Seus dados");
+
+        return new ResponseEntity<>(service.getClientes(token), headers, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/funcionarios")
+    public ResponseEntity<List<UserDTOModel>> getFuncionarios(@RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Success", "Seus dados");
+
+        return new ResponseEntity<>(service.getFuncionarios(token), headers, HttpStatus.ACCEPTED);
+    }
+
     @PostMapping
     public ResponseEntity<Void> createCliente(@Valid @RequestBody ClienteDTOModel user) throws ErrorException, IllegalAccessException {
         HttpHeaders headers = new HttpHeaders();
@@ -62,7 +78,7 @@ public class UserController {
     }
 
     @PutMapping("/funcionario/{id}")
-    public ResponseEntity<Void> updateFuncionario(@Valid @RequestBody UserModel user, @PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
+    public ResponseEntity<Void> updateFuncionario(@Valid @RequestBody UserDTOModel user, @PathVariable Integer id, @RequestHeader(required = true, name = "Authorization") String token) throws ErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Success", "Atualizado");
 

@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -86,6 +88,34 @@ public class UserService {
 
         userRepository.deleteById(myUser.getId());
         return null;
+    }
+
+    public List<UserDTOModel> getClientes(String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
+
+        List<UserModel> userModels = userRepository.findByRole(0);
+        List<UserDTOModel> userDTOModels = new ArrayList<>();
+        for(UserModel user : userModels){
+            userDTOModels.add(new UserDTOModel(user));
+        }
+
+        return userDTOModels;
+    }
+
+    public List<UserDTOModel> getFuncionarios(String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
+
+        List<UserModel> userModels = userRepository.findByRole(1);
+        List<UserDTOModel> userDTOModels = new ArrayList<>();
+        for(UserModel user : userModels){
+            userDTOModels.add(new UserDTOModel(user));
+        }
+
+        return userDTOModels;
     }
 
     public Void createCliente(ClienteDTOModel user) throws ErrorException, IllegalAccessException {
@@ -186,7 +216,7 @@ public class UserService {
         return null;
     }
 
-    public Void updateFuncionario(UserModel user, Integer id, String token) throws ErrorException {
+    public Void updateFuncionario(UserDTOModel user, Integer id, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
         tools.onlyFuncionarios(myUser);

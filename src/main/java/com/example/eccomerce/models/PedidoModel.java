@@ -6,7 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -64,11 +63,10 @@ public class PedidoModel {
     public PedidoModel(ClienteModel cliente) {
         super();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        Date date = new Date();
 
         this.numero = this.generateNumber();
         this.valor = 0.00;
-        this.criado = LocalDate.parse(date.toString(), formatter);
+        this.criado = LocalDate.parse(formatter.format(LocalDate.now()));
         this.entrege = null;
         this.status = "Aberto";
         this.cliente = cliente;
@@ -106,9 +104,10 @@ public class PedidoModel {
         return entrege;
     }
 
-    public void setEntrege(Date entrege) {
+    public void setEntrege(LocalDate entrege) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.entrege = LocalDate.parse(entrege.toString(), formatter);
+        String now = formatter.format(entrege);
+        this.entrege = LocalDate.parse(now, formatter);
     }
 
     public String getStatus() {

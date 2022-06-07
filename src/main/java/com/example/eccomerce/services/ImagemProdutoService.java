@@ -31,13 +31,13 @@ public class ImagemProdutoService {
 	}
 
 	public String generateURL(Integer id) {
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("produto/{id}/image").buildAndExpand(id).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("produto/{id}/imagem").buildAndExpand(id).toUri();
 		return uri.toString();
 	}
 	
 	@Transactional
 	public ImagemProdutoModel getImagem(Integer id) throws ErrorException {
-		Optional<ImagemProdutoModel> optional = repository.findById(id);
+		Optional<ImagemProdutoModel> optional = repository.findByProdutoId(id);
 		if(optional.isEmpty()) {
 			throw new ErrorException("Imagem não existe!");
 		}

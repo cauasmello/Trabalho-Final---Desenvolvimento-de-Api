@@ -64,14 +64,40 @@ public class ProdutoService {
         tools.existUser(myUser);
         tools.onlyFuncionarios(myUser);
 
-        if(produtoNew.isNull()){
-            throw new ErrorException("Infomrações invalidas!");
+        if (produtoNew.getNome() == null || produtoNew.getNome().equals("")) {
+            throw new ErrorException("Informe o nome!");
+        }
+
+        if (produtoNew.getDescricao() == null || produtoNew.getDescricao().equals("")) {
+            throw new ErrorException("Informe a descrição!");
+        }
+
+        if (produtoNew.getValor() == null) {
+            throw new ErrorException("Informe o valor!");
+        }
+
+        if (produtoNew.getQuantidade_estoque() == null) {
+            throw new ErrorException("Informe a quantidade no estoque!");
+        }
+
+        if (produtoNew.getCategoria_id() == null) {
+            throw new ErrorException("Informe o id da categoria!");
+        }
+
+        if(file.isEmpty()){
+            throw new ErrorException("Imagem invalidas!");
         }
 
         Optional<CategoriaModel> optional = categoriaRepository.findById(produtoNew.getCategoria_id());
 
         if(optional.isEmpty()){
             throw new ErrorException("Categoria não existe!");
+        }
+
+        Optional<ProdutoModel> optional2 = repositorio.findByNome(produtoNew.getNome());
+
+        if(optional2.isPresent()){
+            throw new ErrorException("Produto já existe!");
         }
 
         ProdutoModel produto = new ProdutoModel(produtoNew, optional.get(), myUser.getFuncionario());
@@ -94,6 +120,10 @@ public class ProdutoService {
         ProdutoModel produto = optional.get();
 
         if (produtoNew.getNome() != null && !produtoNew.getNome().equals("")) {
+            Optional<ProdutoModel> optional2 = repositorio.findByNome(produtoNew.getNome());
+            if(optional2.isPresent()){
+                throw new ErrorException("Produto já existe!");
+            }
             produto.setNome(produtoNew.getNome());
         }
 

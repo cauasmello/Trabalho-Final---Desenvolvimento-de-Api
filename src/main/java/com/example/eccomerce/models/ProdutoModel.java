@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -69,13 +68,13 @@ public class ProdutoModel {
 
     public ProdutoModel(ProdutoDTOModel produto, CategoriaModel categoria, FuncionarioModel funcionario) {
         super();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        Date date = new Date();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        String now = formatter.format(LocalDate.now());
         this.nome = produto.getNome();
         this.descricao = produto.getDescricao();
         this.valor = produto.getValor();
         this.quantidade_estoque = produto.getQuantidade_estoque();
-        this.criado = LocalDate.parse(date.toString(), formatter);
+        this.criado = LocalDate.parse(now, formatter);
         this.categoria = categoria;
         this.funcionario = funcionario;
     }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDTOModel {
 
+    private Integer id;
+
     private String email;
 
     private String username;
@@ -19,6 +21,7 @@ public class UserDTOModel {
 
     public UserDTOModel(UserModel user) {
         super();
+        this.id = user.getId();
         this.email = user.getEmail();
         this.username = user.getUsername();
         this.senha = user.getSenha();
@@ -56,5 +59,13 @@ public class UserDTOModel {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

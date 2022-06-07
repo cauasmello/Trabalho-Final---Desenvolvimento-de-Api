@@ -26,10 +26,11 @@ public class FuncionarioService {
     @Autowired
     ToolsResource tools;
 
-    public FuncionarioModel getAll(String token) throws ErrorException {
+    public FuncionarioModel getMyData(String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
         tools.onlyFuncionarios(myUser);
+
         return myUser.getFuncionario();
     }
 
@@ -67,6 +68,38 @@ public class FuncionarioService {
         }
 
         repositorio.save(funcionarioModel);
+        return null;
+    }
+
+    public Void updateFuncionario(String cpf, FuncionarioDTOModel funcionarioNew, String token) throws ErrorException {
+        UserModel myUser = jwtUtil.getLoggedUser(token);
+        tools.existUser(myUser);
+        tools.onlyFuncionarios(myUser);
+
+        FuncionarioModel funcionarioModel = myUser.getFuncionario();
+        tools.existFuncionario(funcionarioModel);
+
+        Optional<FuncionarioModel> optional = repositorio.findByCpf(Long.parseLong(cpf));
+        if (optional.isEmpty()) {
+            throw new ErrorException("Funcionario não existe!");
+        }
+
+        FuncionarioModel funcionario = optional.get();
+
+        if (funcionarioNew.getNome() != null && !funcionarioNew.getNome().equals("")) {
+            funcionario.setNome(funcionarioNew.getNome());
+        }
+
+        if (funcionarioNew.getTelefone() != null) {
+            funcionario.setTelefone(funcionarioNew.getTelefone());
+        }
+
+        if (funcionarioNew.getNascimento() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            funcionario.setNascimento(LocalDate.parse(funcionarioNew.getNascimento(), formatter));
+        }
+
+        repositorio.save(funcionario);
         return null;
     }
 }

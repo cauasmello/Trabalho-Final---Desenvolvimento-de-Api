@@ -23,7 +23,8 @@ public class ImagemProdutoModel {
 	@Lob
 	private byte[] data;
 	
-	@OneToOne(mappedBy = "imagem")
+	@OneToOne()
+	@JoinColumn(name = "produto_id", referencedColumnName = "id")
 	private ProdutoModel produto;
 
 	public ImagemProdutoModel() {
