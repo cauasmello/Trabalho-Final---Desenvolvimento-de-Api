@@ -20,9 +20,6 @@ public class PedidoService {
     PedidoRepository repositorio;
 
     @Autowired
-    ImagemProdutoService imagemProdutoService;
-
-    @Autowired
     JWTUtil jwtUtil;
 
     @Autowired
@@ -84,7 +81,7 @@ public class PedidoService {
 
         PedidoModel pedido = optional.get();
 
-        if (pedido.getProdutos() == null) {
+        if (pedido.getProdutos().isEmpty()) {
             throw new ErrorException("Para finalizar adicione um produto!");
         }
 
