@@ -10,6 +10,7 @@ import com.example.eccomerce.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class PedidoProdutoService {
     @Autowired
     ToolsResource tools;
 
+    @Transactional
     public List<ProdutoDTOModel> get(String numero, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);

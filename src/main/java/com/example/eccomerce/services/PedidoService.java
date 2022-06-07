@@ -9,6 +9,7 @@ import com.example.eccomerce.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -69,6 +70,7 @@ public class PedidoService {
         return novoPedido;
     }
 
+    @Transactional
     public Void liberar(String numero, String token) throws ErrorException {
         UserModel myUser = jwtUtil.getLoggedUser(token);
         tools.existUser(myUser);
@@ -81,7 +83,7 @@ public class PedidoService {
 
         PedidoModel pedido = optional.get();
 
-        if (pedido.getProdutos().isEmpty()) {
+        if (pedido.getProdutos() == null) {
             throw new ErrorException("Para finalizar adicione um produto!");
         }
 
