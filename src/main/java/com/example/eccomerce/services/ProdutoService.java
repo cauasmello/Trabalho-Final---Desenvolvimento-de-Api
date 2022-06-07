@@ -5,7 +5,6 @@ import com.example.eccomerce.models.ClienteModel;
 import com.example.eccomerce.models.ProdutoDTOModel;
 import com.example.eccomerce.models.ProdutoModel;
 import com.example.eccomerce.models.UserModel;
-import com.example.eccomerce.repositories.ImagemProdutoRepository;
 import com.example.eccomerce.repositories.ProdutoRepository;
 import com.example.eccomerce.resources.ToolsResource;
 import com.example.eccomerce.security.JWTUtil;
@@ -31,9 +30,6 @@ public class ProdutoService {
 
     @Autowired
     ImagemProdutoService imagemProdutoService;
-
-    @Autowired
-    ImagemProdutoRepository imageRepository;
 
     @Autowired
     JWTUtil jwtUtil;

@@ -1,19 +1,18 @@
 package com.example.eccomerce.services;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
+import com.example.eccomerce.exceptions.ErrorException;
+import com.example.eccomerce.models.ImagemProdutoModel;
+import com.example.eccomerce.models.ProdutoModel;
+import com.example.eccomerce.repositories.ImagemProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.example.eccomerce.models.ImagemProdutoModel;
-import com.example.eccomerce.models.ProdutoModel;
-import com.example.eccomerce.repositories.ImagemProdutoRepository;
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Optional;
 
 @Service
 public class ImagemProdutoService {
@@ -22,13 +21,13 @@ public class ImagemProdutoService {
 	ImagemProdutoRepository repository;
 	
 	@Transactional
-	public ImagemProdutoModel add(ProdutoModel produto, MultipartFile file) throws IOException {
+	public void add(ProdutoModel produto, MultipartFile file) throws IOException {
 		ImagemProdutoModel image = new ImagemProdutoModel();
 		image.setMimeType(file.getContentType());
 		image.setName(file.getName());
 		image.setData(file.getBytes());
 		image.setProduto(produto);
-		return repository.save(image);
+		repository.save(image);
 	}
 
 	public String generateURL(Integer id) {
@@ -37,11 +36,12 @@ public class ImagemProdutoService {
 	}
 	
 	@Transactional
-	public ImagemProdutoModel getImagem(Integer id) {
+	public ImagemProdutoModel getImagem(Integer id) throws ErrorException {
 		Optional<ImagemProdutoModel> optional = repository.findById(id);
 		if(optional.isEmpty()) {
-			return null;
+			throw new ErrorException("Imagem não existe!");
 		}
 		return optional.get();
 	}
+
 }

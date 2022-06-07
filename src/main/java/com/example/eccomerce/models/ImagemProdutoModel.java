@@ -1,21 +1,25 @@
 package com.example.eccomerce.models;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name = "produtos_img")
 public class ImagemProdutoModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
+	@NotNull
+	@Column(name = "nome")
 	private String name;
-	
+
+	@NotNull
+	@Column(name = "mimeType")
 	private String mimeType;
-	
+
+	@NotNull
 	@Lob
 	private byte[] data;
 	

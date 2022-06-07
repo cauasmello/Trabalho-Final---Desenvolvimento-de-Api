@@ -68,7 +68,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}/imagem")
-    public ResponseEntity<byte[]> getImagem(@PathVariable Integer id) {
+    public ResponseEntity<byte[]> getImagem(@PathVariable Integer id) throws ErrorException {
         ImagemProdutoModel imagem = imageService.getImagem(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-type", imagem.getMimeType());
